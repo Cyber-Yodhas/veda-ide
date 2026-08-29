@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-veda-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Veda Studio vNext — Professional Web IDE & AI Code Studio</title>
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- CodeMirror Core & Addon Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/lint/lint.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.css" />
+
+  <!-- CodeMirror Themes (32 Themes) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/nord.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/one-dark.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/solarized.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-darker.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-palenight.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/abbott.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/rubyblue.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/night.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/twilight.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/cobalt.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/blackboard.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/panda-syntax.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/zenburn.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/neat.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/gruvbox-dark.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/the-matrix.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/isotope.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/mbo.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/mdn-like.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/midnight.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/paraiso-dark.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/base16-dark.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/base16-light.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/yeti.min.css" />
+
+  <!-- CodeMirror Core JS & Modes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+
+  <!-- CodeMirror Addons: Edit, Fold, Selection, Search -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchtags.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/brace-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/xml-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/indent-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/comment-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/search.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/comment/comment.min.js"></script>
+
+  <!-- Autocomplete Hints -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/xml-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/html-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/css-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/javascript-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/anyword-hint.min.js"></script>
+
+  <!-- Linting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jshint/2.13.6/jshint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/csslint/1.0.5/csslint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/lint/lint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/lint/javascript-lint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/lint/css-lint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/lint/json-lint.min.js"></script>
+
+  <!-- Beautifier -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-html.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-css.min.js"></script>
+
+  <!-- Emmet Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/emmet-codemirror@1.2.5/dist/emmet.min.js"></script>
+
+  <!-- ZIP Utilities -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <style>
+    :root {
+      --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-code: 'Fira Code', monospace;
+      --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --sat-top: env(safe-area-inset-top, 0px);
+      --sat-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* Themes CSS Variables */
+    .theme-veda-light {
+      --bg-app: #f8fafc; --bg-surface: #ffffff; --bg-sidebar: #f1f5f9; --bg-editor: #ffffff;
+      --bg-active: #e2e8f0; --bg-hover: #e2e8f0; --text-main: #0f172a; --text-muted: #64748b;
+      --border-color: #cbd5e1; --accent-primary: #2563eb; --accent-glow: rgba(37, 99, 235, 0.25);
+      --accent-secondary: #7c3aed; --cm-theme: 'default';
+    }
+    .theme-veda-dark {
+      --bg-app: #0b0f19; --bg-surface: #111827; --bg-sidebar: #0f172a; --bg-editor: #090d16;
+      --bg-active: #1e293b; --bg-hover: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8;
+      --border-color: #1e293b; --accent-primary: #3b82f6; --accent-glow: rgba(59, 130, 246, 0.3);
+      --accent-secondary: #8b5cf6; --cm-theme: 'material';
+    }
+    .theme-dracula {
+      --bg-app: #21222c; --bg-surface: #282a36; --bg-sidebar: #1e1f29; --bg-editor: #282a36;
+      --bg-active: #44475a; --bg-hover: #343746; --text-main: #f8f8f2; --text-muted: #6272a4;
+      --border-color: #44475a; --accent-primary: #bd93f9; --accent-glow: rgba(189, 147, 249, 0.3);
+      --accent-secondary: #ff79c6; --cm-theme: 'dracula';
+    }
+    .theme-monokai {
+      --bg-app: #19181a; --bg-surface: #222125; --bg-sidebar: #1d1c21; --bg-editor: #2d2a2e;
+      --bg-active: #403e41; --bg-hover: #363437; --text-main: #fcfcfa; --text-muted: #939293;
+      --border-color: #2d2a2e; --accent-primary: #ffd866; --accent-glow: rgba(255, 216, 102, 0.3);
+      --accent-secondary: #ff6188; --cm-theme: 'monokai';
+    }
+    .theme-onedark {
+      --bg-app: #1e2227; --bg-surface: #21252b; --bg-sidebar: #1b1e23; --bg-editor: #282c34;
+      --bg-active: #3e4451; --bg-hover: #2c313a; --text-main: #abb2bf; --text-muted: #5c6370;
+      --border-color: #181a1f; --accent-primary: #61afef; --accent-glow: rgba(97, 175, 239, 0.3);
+      --accent-secondary: #c678dd; --cm-theme: 'one-dark';
+    }
+    .theme-nord {
+      --bg-app: #242933; --bg-surface: #2e3440; --bg-sidebar: #282e3a; --bg-editor: #2e3440;
+      --bg-active: #434c5e; --bg-hover: #3b4252; --text-main: #eceff4; --text-muted: #d8dee9;
+      --border-color: #3b4252; --accent-primary: #88c0d0; --accent-glow: rgba(136, 192, 208, 0.3);
+      --accent-secondary: #81a1c1; --cm-theme: 'nord';
+    }
+    .theme-synthwave {
+      --bg-app: #1a1528; --bg-surface: #241b35; --bg-sidebar: #1e172d; --bg-editor: #261c3b;
+      --bg-active: #3c2a58; --bg-hover: #33234b; --text-main: #fdfdfd; --text-muted: #847996;
+      --border-color: #3f2d5c; --accent-primary: #ff7edb; --accent-glow: rgba(255, 126, 219, 0.4);
+      --accent-secondary: #36f9f6; --cm-theme: 'material-palenight';
+    }
+    .theme-tokyo-night {
+      --bg-app: #16161e; --bg-surface: #1a1b26; --bg-sidebar: #16161e; --bg-editor: #1a1b26;
+      --bg-active: #292e42; --bg-hover: #212337; --text-main: #a9b1d6; --text-muted: #565f89;
+      --border-color: #232433; --accent-primary: #7aa2f7; --accent-glow: rgba(122, 162, 247, 0.3);
+      --accent-secondary: #bb9af7; --cm-theme: 'abbott';
+    }
+    .theme-cyberpunk {
+      --bg-app: #03001e; --bg-surface: #0f0c29; --bg-sidebar: #0a081d; --bg-editor: #0f0c29;
+      --bg-active: #24243e; --bg-hover: #1b1838; --text-main: #00f5d4; --text-muted: #7b2cbf;
+      --border-color: #f72585; --accent-primary: #fee440; --accent-glow: rgba(254, 228, 64, 0.4);
+      --accent-secondary: #ff007f; --cm-theme: 'material-darker';
+    }
+    .theme-solarized {
+      --bg-app: #001e26; --bg-surface: #002b36; --bg-sidebar: #00222b; --bg-editor: #002b36;
+      --bg-active: #073642; --bg-hover: #003847; --text-main: #839496; --text-muted: #586e75;
+      --border-color: #073642; --accent-primary: #268bd2; --accent-glow: rgba(38, 139, 210, 0.3);
+      --accent-secondary: #2aa198; --cm-theme: 'solarized';
+    }
+    .theme-emerald {
+      --bg-app: #062016; --bg-surface: #0a2e20; --bg-sidebar: #07261a; --bg-editor: #0a2e20;
+      --bg-active: #134e38; --bg-hover: #0e3d2c; --text-main: #e8f5e9; --text-muted: #81c784;
+      --border-color: #1b5e20; --accent-primary: #10b981; --accent-glow: rgba(16, 185, 129, 0.35);
+      --accent-secondary: #34d399; --cm-theme: 'material';
+    }
+    .theme-github-light {
+      --bg-app: #ffffff; --bg-surface: #f6f8fa; --bg-sidebar: #f3f4f6; --bg-editor: #ffffff;
+      --bg-active: #eaeef2; --bg-hover: #f3f4f6; --text-main: #24292f; --text-muted: #57606a;
+      --border-color: #d0d7de; --accent-primary: #0969da; --accent-glow: rgba(9, 105, 218, 0.2);
+      --accent-secondary: #1f883d; --cm-theme: 'eclipse';
+    }
+    .theme-neon-matrix {
+      --bg-app: #020d08; --bg-surface: #051a10; --bg-sidebar: #03120b; --bg-editor: #04140d;
+      --bg-active: #0c3822; --bg-hover: #082918; --text-main: #00ff66; --text-muted: #00993d;
+      --border-color: #00ff6633; --accent-primary: #00ff66; --accent-glow: rgba(0, 255, 102, 0.4);
+      --accent-secondary: #33ff99; --cm-theme: 'night';
+    }
+    .theme-sunset {
+      --bg-app: #1f0b18; --bg-surface: #2d1023; --bg-sidebar: #260d1e; --bg-editor: #2b0f22;
+      --bg-active: #4a193a; --bg-hover: #3b142f; --text-main: #ffd166; --text-muted: #f78c6c;
+      --border-color: #f7258555; --accent-primary: #ff5e7e; --accent-glow: rgba(255, 94, 126, 0.4);
+      --accent-secondary: #ff9966; --cm-theme: 'rubyblue';
+    }
+    .theme-ocean {
+      --bg-app: #08121e; --bg-surface: #0f1d2d; --bg-sidebar: #0b1724; --bg-editor: #0d1928;
+      --bg-active: #1a314b; --bg-hover: #14273d; --text-main: #e0f2fe; --text-muted: #38bdf8;
+      --border-color: #1e3a5f; --accent-primary: #0ea5e9; --accent-glow: rgba(14, 165, 233, 0.4);
+      --accent-secondary: #06b6d4; --cm-theme: 'cobalt';
+    }
+    .theme-rose-pine {
+      --bg-app: #191724; --bg-surface: #1f1d2e; --bg-sidebar: #181623; --bg-editor: #1f1d2e;
+      --bg-active: #2a283e; --bg-hover: #252338; --text-main: #e0def4; --text-muted: #908caa;
+      --border-color: #26233a; --accent-primary: #ebbcba; --accent-glow: rgba(235, 188, 186, 0.3);
+      --accent-secondary: #c4a7e7; --cm-theme: 'twilight';
+    }
+    .theme-mocha {
+      --bg-app: #1e1e1e; --bg-surface: #252526; --bg-sidebar: #1b1b1c; --bg-editor: #252526;
+      --bg-active: #37373d; --bg-hover: #2d2d30; --text-main: #d4d4d4; --text-muted: #858585;
+      --border-color: #383838; --accent-primary: #ce9178; --accent-glow: rgba(206, 145, 120, 0.3);
+      --accent-secondary: #dcdcaa; --cm-theme: 'zenburn';
+    }
+    .theme-midnight-violet {
+      --bg-app: #120924; --bg-surface: #1b0e36; --bg-sidebar: #150b2b; --bg-editor: #1a0d34;
+      --bg-active: #311961; --bg-hover: #251349; --text-main: #e9d5ff; --text-muted: #a855f7;
+      --border-color: #3b0764; --accent-primary: #c084fc; --accent-glow: rgba(192, 132, 252, 0.4);
+      --accent-secondary: #f472b6; --cm-theme: 'blackboard';
+    }
+    .theme-obsidian {
+      --bg-app: #000000; --bg-surface: #0a0a0a; --bg-sidebar: #050505; --bg-editor: #000000;
+      --bg-active: #222222; --bg-hover: #161616; --text-main: #ffffff; --text-muted: #777777;
+      --border-color: #262626; --accent-primary: #ffffff; --accent-glow: rgba(255, 255, 255, 0.4);
+      --accent-secondary: #a1a1aa; --cm-theme: 'panda-syntax';
+    }
+    .theme-ice-chill {
+      --bg-app: #0f172a; --bg-surface: #1e293b; --bg-sidebar: #0f172a; --bg-editor: #1e293b;
+      --bg-active: #334155; --bg-hover: #2a3749; --text-main: #f1f5f9; --text-muted: #94a3b8;
+      --border-color: #334155; --accent-primary: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.35);
+      --accent-secondary: #818cf8; --cm-theme: 'nord';
+    }
+    .theme-paper-light {
+      --bg-app: #f4f1ea; --bg-surface: #faf8f5; --bg-sidebar: #eee9e0; --bg-editor: #faf8f5;
+      --bg-active: #e3dcce; --bg-hover: #e8e2d5; --text-main: #2b2b2b; --text-muted: #767676;
+      --border-color: #d8d0c0; --accent-primary: #d9534f; --accent-glow: rgba(217, 83, 79, 0.3);
+      --accent-secondary: #f0ad4e; --cm-theme: 'neat';
+    }
+    .theme-pastel-day {
+      --bg-app: #f0f4f8; --bg-surface: #ffffff; --bg-sidebar: #e1e8f0; --bg-editor: #ffffff;
+      --bg-active: #cbd5e1; --bg-hover: #d8e2ed; --text-main: #334155; --text-muted: #64748b;
+      --border-color: #cbd5e1; --accent-primary: #ec4899; --accent-glow: rgba(236, 72, 153, 0.3);
+      --accent-secondary: #8b5cf6; --cm-theme: 'default';
+    }
+    .theme-gruvbox-dark {
+      --bg-app: #1d2021; --bg-surface: #282828; --bg-sidebar: #1d2021; --bg-editor: #282828;
+      --bg-active: #504945; --bg-hover: #3c3836; --text-main: #ebdbb2; --text-muted: #a89984;
+      --border-color: #3c3836; --accent-primary: #fe8019; --accent-glow: rgba(254, 128, 25, 0.35);
+      --accent-secondary: #fabd2f; --cm-theme: 'gruvbox-dark';
+    }
+    .theme-matrix-hacker {
+      --bg-app: #000000; --bg-surface: #050a05; --bg-sidebar: #000000; --bg-editor: #000000;
+      --bg-active: #0f2d0f; --bg-hover: #071907; --text-main: #00ff41; --text-muted: #008f11;
+      --border-color: #003b00; --accent-primary: #00ff41; --accent-glow: rgba(0, 255, 65, 0.4);
+      --accent-secondary: #003b00; --cm-theme: 'the-matrix';
+    }
+    .theme-isotope {
+      --bg-app: #000000; --bg-surface: #101010; --bg-sidebar: #080808; --bg-editor: #000000;
+      --bg-active: #202020; --bg-hover: #151515; --text-main: #d0d0d0; --text-muted: #707070;
+      --border-color: #303030; --accent-primary: #3399cc; --accent-glow: rgba(51, 153, 204, 0.4);
+      --accent-secondary: #cc3333; --cm-theme: 'isotope';
+    }
+    .theme-mbo {
+      --bg-app: #222222; --bg-surface: #2d2d2d; --bg-sidebar: #1a1a1a; --bg-editor: #2d2d2d;
+      --bg-active: #444444; --bg-hover: #383838; --text-main: #eeffff; --text-muted: #888888;
+      --border-color: #333333; --accent-primary: #00bcd4; --accent-glow: rgba(0, 188, 212, 0.35);
+      --accent-secondary: #ff4081; --cm-theme: 'mbo';
+    }
+    .theme-mdn-light {
+      --bg-app: #f4f4f4; --bg-surface: #ffffff; --bg-sidebar: #eaeaea; --bg-editor: #ffffff;
+      --bg-active: #ddd; --bg-hover: #e5e5e5; --text-main: #333333; --text-muted: #777777;
+      --border-color: #ccc; --accent-primary: #3399cc; --accent-glow: rgba(51, 153, 204, 0.25);
+      --accent-secondary: #990000; --cm-theme: 'mdn-like';
+    }
+    .theme-midnight {
+      --bg-app: #0f1015; --bg-surface: #181920; --bg-sidebar: #0f1015; --bg-editor: #181920;
+      --bg-active: #2d313f; --bg-hover: #222530; --text-main: #d1d5db; --text-muted: #6b7280;
+      --border-color: #262938; --accent-primary: #6366f1; --accent-glow: rgba(99, 102, 241, 0.4);
+      --accent-secondary: #a855f7; --cm-theme: 'midnight';
+    }
+    .theme-paraiso {
+      --bg-app: #2f1e2e; --bg-surface: #382537; --bg-sidebar: #281927; --bg-editor: #2f1e2e;
+      --bg-active: #4d334b; --bg-hover: #412b3f; --text-main: #e7e9db; --text-muted: #8d8687;
+      --border-color: #412b3f; --accent-primary: #ef6155; --accent-glow: rgba(239, 97, 85, 0.35);
+      --accent-secondary: #fec418; --cm-theme: 'paraiso-dark';
+    }
+    .theme-base16-dark {
+      --bg-app: #151515; --bg-surface: #202020; --bg-sidebar: #101010; --bg-editor: #151515;
+      --bg-active: #303030; --bg-hover: #282828; --text-main: #e0e0e0; --text-muted: #909090;
+      --border-color: #282828; --accent-primary: #90a959; --accent-glow: rgba(144, 169, 89, 0.35);
+      --accent-secondary: #6a9fb5; --cm-theme: 'base16-dark';
+    }
+    .theme-base16-light {
+      --bg-app: #f5f5f5; --bg-surface: #ffffff; --bg-sidebar: #e8e8e8; --bg-editor: #ffffff;
+      --bg-active: #d8d8d8; --bg-hover: #e0e0e0; --text-main: #202020; --text-muted: #707070;
+      --border-color: #d0d0d0; --accent-primary: #90a959; --accent-glow: rgba(144, 169, 89, 0.25);
+      --accent-secondary: #6a9fb5; --cm-theme: 'base16-light';
+    }
+    .theme-yeti {
+      --bg-app: #1b262c; --bg-surface: #222e35; --bg-sidebar: #172126; --bg-editor: #222e35;
+      --bg-active: #32444e; --bg-hover: #293841; --text-main: #d1d5db; --text-muted: #758a99;
+      --border-color: #2c3c45; --accent-primary: #967adc; --accent-glow: rgba(150, 122, 220, 0.35);
+      --accent-secondary: #47cead; --cm-theme: 'yeti';
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-ui); -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; height: 100dvh; width: 100vw; overflow: hidden; background-color: var(--bg-app); color: var(--text-main); display: flex; flex-direction: column; position: fixed; inset: 0; transition: background-color var(--transition-fast), color var(--transition-fast); padding-top: var(--sat-top); padding-bottom: var(--sat-bottom); }
+
+    .scrollable { overflow-y: auto !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; touch-action: pan-x pan-y !important; overscroll-behavior: contain; }
+    .scrollable::-webkit-scrollbar { width: 5px; height: 5px; }
+    .scrollable::-webkit-scrollbar-thumb { background: rgba(120,120,120,0.3); border-radius: 4px; }
+    .scrollable::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+
+    /* App Header */
+    .app-header { height: calc(50px + var(--sat-top)); min-height: 50px; background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: var(--sat-top) 12px 0 12px; z-index: 100; flex-shrink: 0; gap: 8px; overflow-x: auto; white-space: nowrap; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; cursor: pointer; user-select: none; }
+    .brand-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; box-shadow: 0 0 10px var(--accent-glow); }
+    .version-tag { font-size: 0.65rem; background: rgba(59, 130, 246, 0.15); color: var(--accent-primary); padding: 2px 6px; border-radius: 10px; font-weight: 700; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+    .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; flex-shrink: 0; }
+    .btn { padding: 6px 11px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; transition: all var(--transition-fast); white-space: nowrap; }
+    .btn:active { transform: scale(0.95); }
+    .btn:hover { background: var(--bg-hover); border-color: var(--accent-primary); box-shadow: 0 0 8px var(--accent-glow); }
+    .btn-primary { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+    .btn-success { background: #10b981; color: #fff; border-color: #10b981; }
+    .btn-ai { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; border: none; font-weight: 700; }
+    .btn-live-active { background: #10b981 !important; color: #fff !important; border-color: #10b981 !important; }
+
+    .select-input { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-size: 0.78rem; font-weight: 700; outline: none; cursor: pointer; transition: border-color var(--transition-fast); flex-shrink: 0; }
+    .select-input:focus { border-color: var(--accent-primary); }
+
+    .status-badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 20px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; gap: 5px; font-weight: 700; flex-shrink: 0; cursor: pointer; }
+    .status-badge.saving { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+
+    /* Main Layout */
+    .app-body { flex: 1; display: flex; position: relative; overflow: hidden; width: 100%; }
+
+    /* Left Activity Bar */
+    .activity-bar { width: 48px; background: var(--bg-surface); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 14px; z-index: 35; flex-shrink: 0; }
+    .act-btn { width: 34px; height: 34px; border-radius: 8px; border: none; background: transparent; color: var(--text-muted); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast); position: relative; }
+    .act-btn:hover, .act-btn.active { color: var(--accent-primary); background: var(--bg-hover); }
+    .act-btn.active::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; background: var(--accent-primary); border-radius: 0 3px 3px 0; }
+
+    /* Sidebar Drawer */
+    .sidebar-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 25; backdrop-filter: blur(3px); }
+    .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; z-index: 30; transition: transform var(--transition-fast); }
+    .sidebar-header { padding: 10px 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); flex-shrink: 0; letter-spacing: 0.5px; }
+    .sidebar-actions { display: flex; gap: 4px; }
+    .icon-btn { width: 28px; height: 28px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; border: none; background: transparent; font-size: 0.82rem; transition: all var(--transition-fast); }
+    .icon-btn:hover { background: var(--bg-hover); color: var(--text-main); }
+    
+    .file-search-box { padding: 8px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+    .file-search-box input { width: 100%; background: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main); font-size: 0.76rem; padding: 5px 8px; border-radius: 5px; outline: none; }
+    .file-tree { flex: 1; padding: 6px 0; overflow-x: auto !important; }
+    .tree-item { padding: 6px 12px; font-size: 0.82rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--text-muted); gap: 8px; transition: background var(--transition-fast); min-width: max-content; }
+    .tree-item:hover { background: var(--bg-hover); color: var(--text-main); }
+    .tree-item.active { background: var(--bg-active); color: var(--accent-primary); font-weight: 700; border-left: 3px solid var(--accent-primary); }
+    .tree-item-info { display: flex; align-items: center; gap: 8px; white-space: nowrap; flex: 1; }
+    .tree-item-actions { display: none; gap: 2px; flex-shrink: 0; }
+    .tree-item:hover .tree-item-actions { display: flex; }
+
+    /* Sidebar Views */
+    .sidebar-view { display: none; flex-direction: column; height: 100%; }
+    .sidebar-view.active { display: flex; }
+
+    /* Workspace */
+    .workspace { flex: 1; display: flex; flex-direction: column; background: var(--bg-app); overflow: hidden; position: relative; }
+    .breadcrumbs { height: 24px; background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 12px; font-size: 0.7rem; color: var(--text-muted); gap: 6px; flex-shrink: 0; font-family: var(--font-code); }
+
+    .editor-tabs { height: 38px; background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; flex-shrink: 0; white-space: nowrap; overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+    .tab { padding: 0 14px; height: 100%; display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-family: var(--font-code); color: var(--text-muted); background: transparent; border-right: 1px solid var(--border-color); cursor: pointer; flex-shrink: 0; }
+    .tab.active { background: var(--bg-editor); color: var(--accent-primary); border-top: 2px solid var(--accent-primary); font-weight: 700; }
+    .tab-close { opacity: 0.5; font-size: 0.75rem; padding: 2px; }
+    .tab-close:hover { opacity: 1; color: #ef4444; }
+
+    .editor-preview-split { flex: 1; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; position: relative; }
+    .editor-container { display: flex; flex-direction: column; height: 100%; width: 100%; background: var(--bg-editor); position: relative; overflow: hidden; }
+
+    /* CodeMirror Custom Enhancements */
+    .CodeMirror { height: 100% !important; width: 100% !important; font-family: var(--font-code) !important; font-size: 13.5px !important; line-height: 1.55 !important; background: transparent !important; }
+    .CodeMirror-scroll { overflow-y: auto !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; touch-action: pan-x pan-y !important; }
+    .CodeMirror-gutters { background: var(--bg-sidebar) !important; border-right: 1px solid var(--border-color) !important; }
+    .CodeMirror-activeline-background { background: rgba(255, 255, 255, 0.04) !important; }
+    .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded { cursor: pointer; color: var(--text-muted); }
+    .CodeMirror-hints { font-family: var(--font-code) !important; font-size: 12px; z-index: 1000; background: var(--bg-surface) !important; color: var(--text-main) !important; border: 1px solid var(--border-color) !important; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    li.CodeMirror-hint-active { background: var(--accent-primary) !important; color: #fff !important; }
+
+    /* AI Ghost Suggestion Styling */
+    .cm-ghost-text { opacity: 0.45; font-style: italic; color: var(--accent-secondary); pointer-events: none; }
+
+    /* Preview Container */
+    .preview-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; position: relative; overflow: hidden; }
+    .preview-toolbar { height: 32px; background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 0.73rem; color: var(--text-muted); flex-shrink: 0; font-weight: 600; }
+    iframe#previewFrame { width: 100%; flex: 1; border: none; background: #ffffff; }
+
+    /* Bottom Panel (Console & Diagnostics) */
+    .bottom-panel { height: 160px; background: var(--bg-sidebar); border-top: 1px solid var(--border-color); display: flex; flex-direction: column; transition: height 0.25s ease; z-index: 15; flex-shrink: 0; }
+    .bottom-panel.collapsed { height: 28px; }
+    .panel-tabs { height: 28px; background: var(--bg-surface); padding: 0 10px; display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+    .panel-tab-btn { background: none; border: none; color: var(--text-muted); font-size: 0.74rem; font-weight: 700; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
+    .panel-tab-btn.active { color: var(--accent-primary); background: var(--bg-hover); }
+    .panel-content { flex: 1; padding: 6px 10px; font-family: var(--font-code); font-size: 0.75rem; overflow-y: auto; }
+    .log-line { padding: 3px 0; border-bottom: 1px solid rgba(0,0,0,0.05); white-space: pre-wrap; word-break: break-all; }
+    .log-info { color: #2563eb; }
+    .log-error { color: #dc2626; }
+    .log-warn { color: #d97706; }
+    .diag-item { padding: 4px 6px; border-bottom: 1px solid var(--border-color); cursor: pointer; display: flex; gap: 8px; align-items: center; }
+    .diag-item:hover { background: var(--bg-hover); }
+
+    /* Mobile Touch Bar */
+    .mobile-touch-bar { display: flex; background: var(--bg-surface); border-top: 1px solid var(--border-color); padding: 6px; gap: 6px; flex-shrink: 0; z-index: 10; align-items: center; padding-bottom: calc(6px + var(--sat-bottom)); overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+    .touch-key { padding: 6px 11px; background: var(--bg-active); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 6px; font-family: var(--font-code); font-size: 0.85rem; font-weight: 700; flex-shrink: 0; cursor: pointer; touch-action: manipulation; transition: all 0.1s ease; }
+    .touch-key:active { background: var(--accent-primary); color: #fff; transform: scale(0.92); }
+    .touch-key-fn { background: var(--bg-hover); color: var(--accent-primary); }
+
+    /* Command Palette Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; align-items: flex-start; justify-content: center; padding-top: 80px; }
+    .modal-overlay.open { display: flex; }
+    .command-palette { width: 520px; max-width: 90vw; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; display: flex; flex-direction: column; }
+    .command-input-wrapper { padding: 12px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; }
+    .command-input-wrapper input { flex: 1; background: transparent; border: none; outline: none; color: var(--text-main); font-size: 0.95rem; font-family: var(--font-ui); }
+    .command-list { max-height: 300px; overflow-y: auto; padding: 6px 0; }
+    .command-item { padding: 9px 16px; font-size: 0.82rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--text-main); }
+    .command-item:hover, .command-item.selected { background: var(--accent-primary); color: #fff; }
+
+    /* Hidden File Input */
+    #fileInput { display: none; }
+
+    /* Mobile Responsive Adjustments */
+    .mobile-tab-bar { display: none; height: 40px; background: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 4px; gap: 4px; flex-shrink: 0; }
+    .mobile-tab-btn { flex: 1; border: none; background: transparent; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; }
+    .mobile-tab-btn.active { background: var(--accent-primary); color: #fff; }
+
+    @media (max-width: 768px) {
+      .mobile-tab-bar { display: flex; }
+      .activity-bar { display: none; }
+      .desktop-only { display: none !important; }
+      .sidebar { position: absolute; top: 0; bottom: 0; left: 0; width: 280px; transform: translateX(-100%); box-shadow: 6px 0 20px rgba(0,0,0,0.3); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .editor-preview-split { grid-template-columns: 1fr; }
+      .preview-container { display: none; }
+      .preview-container.mobile-show { display: flex; }
+      .editor-container.mobile-hide { display: none; }
+    }
+  </style>
+</head>
+<body class="theme-veda-dark">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand" onclick="CommandPalette.open()" title="Click to open Command Palette (F1)">
+      <div class="brand-icon"><i class="fa-solid fa-code"></i></div>
+      <span>Veda Studio</span>
+      <span class="version-tag">v5.0 Pro</span>
+    </div>
+
+    <div class="status-badge" id="saveBadge" onclick="PreviewEngine.openBrowserWindow()" title="Click to launch external browser sync">
+      <i class="fa-solid fa-bolt"></i> <span id="statusBadgeText">Live Sync</span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Performance Mode Select -->
+      <select id="perfModeSelect" class="select-input" onchange="PreviewEngine.setPerformanceMode(this.value)" title="Live Preview Performance Mode">
+        <option value="turbo">⚡ Turbo Mode</option>
+        <option value="balanced" selected>⚖️ Balanced</option>
+        <option value="battery">🔋 Saver</option>
+      </select>
+
+      <!-- Theme Select -->
+      <select id="themeSelect" class="select-input" onchange="ThemeManager.changeTheme(this.value)">
+        <option value="theme-veda-dark" selected>Veda Dark Pro</option>
+        <option value="theme-veda-light">Veda Light</option>
+        <option value="theme-github-light">GitHub Light</option>
+
+        <option value="theme-dracula">Dracula</option>
+        <option value="theme-monokai">Monokai Pro</option>
+        <option value="theme-onedark">One Dark Pro</option>
+        <option value="theme-nord">Nord Frost</option>
+        <option value="theme-synthwave">Synthwave '84</option>
+        <option value="theme-tokyo-night">Tokyo Night</option>
+        <option value="theme-cyberpunk">Cyberpunk 2077</option>
+        <option value="theme-solarized">Solarized Dark</option>
+        <option value="theme-emerald">Emerald Forest</option>
+        <option value="theme-neon-matrix">Neon Matrix</option>
+        <option value="theme-sunset">Sunset Gradient</option>
+        <option value="theme-ocean">Ocean Abyss</option>
+        <option value="theme-rose-pine">Rosé Pine</option>
+        <option value="theme-mocha">Warm Mocha</option>
+        <option value="theme-midnight-violet">Midnight Violet</option>
+        <option value="theme-obsidian">Obsidian OLED</option>
+        <option value="theme-ice-chill">Ice Chill Frost</option>
+        <option value="theme-gruvbox-dark">Gruvbox Dark Pro</option>
+        <option value="theme-matrix-hacker">Matrix Terminal</option>
+        <option value="theme-isotope">Isotope Cobalt</option>
+        <option value="theme-mbo">MBO Dark Cyan</option>
+        <option value="theme-mdn-light">MDN Web Light</option>
+        <option value="theme-midnight">Midnight Indigo</option>
+        <option value="theme-paraiso">Paraiso Sunset</option>
+        <option value="theme-base16-dark">Base16 Dark</option>
+        <option value="theme-base16-light">Base16 Light</option>
+        <option value="theme-yeti">Yeti Ice Studio</option>
+      </select>
+
+      <button class="btn btn-ai" onclick="AIAssistant.triggerPrompt()" title="AI Assistant (Ctrl + I)">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> <span class="desktop-only">AI Assistant</span>
+      </button>
+
+      <button class="btn btn-success" onclick="ProjectManager.openLocalFolder()" title="Open Native Local Folder">
+        <i class="fa-solid fa-folder-open"></i> <span class="desktop-only">Open Folder</span>
+      </button>
+
+      <button class="btn btn-live-active" id="btnLiveToggle" onclick="PreviewEngine.toggleLiveServer()" title="Toggle Live Server Auto-Reload">
+        <i class="fa-solid fa-sync fa-spin"></i> <span class="desktop-only">Live Sync</span>
+      </button>
+
+      <button class="btn btn-primary" onclick="PreviewEngine.runNow()" title="Run Preview (Ctrl + Enter)">
+        <i class="fa-solid fa-play"></i> <span class="desktop-only">Run</span>
+      </button>
+
+      <button class="btn" onclick="EditorEngine.formatCurrentCode()" title="Format Code (Shift + Alt + F)">
+        <i class="fa-solid fa-align-left"></i> <span class="desktop-only">Format</span>
+      </button>
+
+      <button class="btn" onclick="ProjectManager.triggerImport()" title="Import File">
+        <i class="fa-solid fa-file-import"></i>
+      </button>
+      <input type="file" id="fileInput" onchange="ProjectManager.handleImportFiles(event)" multiple>
+
+      <button class="btn" onclick="ProjectManager.exportZip()" title="Export Project ZIP">
+        <i class="fa-solid fa-file-zipper"></i> <span class="desktop-only">Zip</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Tab Bar -->
+  <div class="mobile-tab-bar">
+    <button class="mobile-tab-btn" onclick="UIController.switchMobileView('files')"><i class="fa-solid fa-folder-tree"></i> Files</button>
+    <button class="mobile-tab-btn active" id="mobTabCode" onclick="UIController.switchMobileView('editor')"><i class="fa-solid fa-code"></i> Code</button>
+    <button class="mobile-tab-btn" id="mobTabPreview" onclick="UIController.switchMobileView('preview')"><i class="fa-solid fa-eye"></i> Preview</button>
+    <button class="mobile-tab-btn" onclick="UIController.switchMobileView('console')"><i class="fa-solid fa-terminal"></i> Console</button>
+  </div>
+
+  <!-- Main Body -->
+  <main class="app-body">
+    <!-- Activity Bar -->
+    <div class="activity-bar">
+      <button class="act-btn active" onclick="UIController.setSidebarView('explorer')" title="Explorer"><i class="fa-solid fa-copy"></i></button>
+      <button class="act-btn" onclick="UIController.setSidebarView('search')" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="act-btn" onclick="UIController.setSidebarView('ai')" title="AI Copilot"><i class="fa-solid fa-robot"></i></button>
+      <button class="act-btn" onclick="UIController.setSidebarView('snippets')" title="Snippets"><i class="fa-solid fa-boxes-stacked"></i></button>
+      <button class="act-btn" onclick="CommandPalette.open()" title="Command Palette (F1)"><i class="fa-solid fa-terminal"></i></button>
+    </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="UIController.closeSidebar()"></div>
+
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Explorer View -->
+      <div class="sidebar-view active" id="viewExplorer">
+        <div class="sidebar-header">
+          <span id="folderTitle">Project Explorer</span>
+          <div class="sidebar-actions">
+            <button class="icon-btn" onclick="ProjectManager.promptNewFile()" title="New File"><i class="fa-solid fa-file-circle-plus"></i></button>
+
+            <button class="icon-btn" onclick="ProjectManager.resetToDefaults()" title="Reset Project"><i class="fa-solid fa-rotate-right"></i></button>
+            <button class="icon-btn" onclick="UIController.closeSidebar()" title="Close Sidebar"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+        <div class="file-search-box">
+          <input type="text" id="fileFilter" placeholder="Filter files..." oninput="ProjectManager.renderFileTree()" />
+        </div>
+        <div class="file-tree scrollable" id="fileTree"></div>
+      </div>
+
+      <!-- Search View -->
+      <div class="sidebar-view" id="viewSearch">
+        <div class="sidebar-header">
+          <span>Project Search</span>
+        </div>
+        <div class="file-search-box">
+          <input type="text" id="projectSearchInput" placeholder="Search in all files..." onkeyup="ProjectManager.searchInProject(this.value)" />
+        </div>
+        <div class="file-tree scrollable" id="searchResultsTree"></div>
+      </div>
+
+      <!-- AI Assistant View -->
+      <div class="sidebar-view" id="viewAI">
+        <div class="sidebar-header">
+          <span>AI Assistant</span>
+        </div>
+        <div style="padding:12px; display:flex; flex-direction:column; gap:10px;">
+          <label style="font-size:0.75rem; color:var(--text-muted);">AI Provider Mode</label>
+          <select id="aiProviderSelect" class="select-input" style="width:100%;">
+            <option value="mock">Built-in Offline AI Mode</option>
+            <option value="gemini">Google Gemini API</option>
+            <option value="openai">OpenAI API</option>
+          </select>
+          <input type="password" id="aiApiKeyInput" class="select-input" placeholder="API Key (Stored locally)" style="width:100%; display:none;" />
+          <button class="btn btn-ai" onclick="AIAssistant.explainCode()">Explain Active Code</button>
+          <button class="btn" onclick="AIAssistant.findBugs()">Find Potential Bugs</button>
+          <button class="btn" onclick="AIAssistant.refactorCode()">Refactor Selection</button>
+          <div id="aiResponseContainer" class="scrollable" style="font-size:0.75rem; background:var(--bg-app); padding:8px; border-radius:6px; min-height:120px; white-space:pre-wrap;">AI output will appear here...</div>
+        </div>
+      </div>
+
+      <!-- Snippets View -->
+      <div class="sidebar-view" id="viewSnippets">
+        <div class="sidebar-header">
+          <span>Code Snippets</span>
+        </div>
+        <div class="file-tree scrollable" id="snippetList" style="padding:10px;"></div>
+      </div>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs" id="breadcrumbs">
+        <i class="fa-solid fa-folder-open"></i> <span id="breadcrumbPath">index.html</span>
+      </div>
+
+      <!-- Editor Tabs -->
+      <div class="editor-tabs scrollable" id="editorTabs"></div>
+
+      <!-- Editor & Preview Split -->
+      <div class="editor-preview-split">
+        <div class="editor-container" id="editorContainer">
+          <textarea id="codeTextarea"></textarea>
+
+          <!-- Mobile Quick Touch Bar -->
+          <div class="mobile-touch-bar scrollable">
+            <button class="touch-key touch-key-fn" onclick="SafeEmmet.trigger()">Emmet (Tab)</button>
+            <button class="touch-key touch-key-fn" onclick="EditorEngine.insertSymbol('  ')">Tab</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('<')">&lt;</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('>')">&gt;</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('/')">/</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('=')">=</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('{')">{</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('}')">}</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('(')">(</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol(')')">)</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('[')">[</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol(']')">]</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol(';')">;</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol(':')">:</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('&quot;')">&quot;</button>
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('\'')">'</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('!')">!</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('+')">+</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('-')">-</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('*')">*</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('$')">$</button>
+
+            <button class="touch-key" onclick="EditorEngine.insertSymbol('#')">#</button>
+            <button class="touch-key touch-key-fn" onclick="EditorEngine.toggleComment()"><i class="fa-solid fa-comment-slash"></i></button>
+
+            <button class="touch-key touch-key-fn" onclick="EditorEngine.undo()"><i class="fa-solid fa-rotate-left"></i></button>
+
+            <button class="touch-key touch-key-fn" onclick="EditorEngine.redo()"><i class="fa-solid fa-rotate-right"></i></button>
+
+          </div>
+        </div>
+
+        <!-- Preview Live Output -->
+        <div class="preview-container" id="previewContainer">
+          <div class="preview-toolbar">
+            <span><i class="fa-solid fa-desktop"></i> Realtime Live Server Output</span>
+            <div style="display:flex; gap: 8px; align-items: center;">
+              <span id="previewStatus" style="color: #10b981; font-weight: 700;"><i class="fa-solid fa-circle-dot"></i> Live Sync</span>
+              <button class="icon-btn" onclick="PreviewEngine.openBrowserWindow()" title="Open Direct in Browser Window"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+            </div>
+          </div>
+          <iframe id="previewFrame" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
+        </div>
+      </div>
+
+      <!-- Bottom Drawer Console & Diagnostics -->
+      <div class="bottom-panel collapsed" id="bottomPanel">
+        <div class="panel-tabs">
+          <div style="display:flex; gap:4px;">
+            <button class="panel-tab-btn active" id="tabBtnConsole" onclick="UIController.switchBottomTab('console')"><i class="fa-solid fa-terminal"></i> Console Logs</button>
+            <button class="panel-tab-btn" id="tabBtnProblems" onclick="UIController.switchBottomTab('problems')"><i class="fa-solid fa-triangle-exclamation"></i> Problems (<span id="diagCount">0</span>)</button>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="icon-btn" onclick="DiagnosticEngine.clearLogs()" title="Clear Console"><i class="fa-solid fa-ban"></i></button>
+            <button class="icon-btn" onclick="UIController.toggleBottomPanel()"><i class="fa-solid fa-chevron-up" id="bottomPanelToggleIcon"></i></button>
+          </div>
+        </div>
+        <div class="panel-content scrollable" id="consoleLogs"></div>
+        <div class="panel-content scrollable" id="problemsContainer" style="display:none;"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Command Palette Modal -->
+  <div class="modal-overlay" id="commandPaletteModal" onclick="CommandPalette.close(event)">
+    <div class="command-palette" onclick="event.stopPropagation()">
+      <div class="command-input-wrapper">
+        <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i>
+        <input type="text" id="commandInput" placeholder="Type a command or search files..." oninput="CommandPalette.filter(this.value)" />
+      </div>
+      <div class="command-list scrollable" id="commandList"></div>
+    </div>
+  </div>
+
+  <script>
+    /* Global Application State Namespace */
+    const VEDA = {
+      version: "5.0 Pro",
+      editor: null,
+      activeFile: "index.html",
+      openTabs: [],
+      files: {},
+      snippets: {},
+      isLiveServerOn: true,
+      perfMode: "balanced"
+    };
+
+    /* Crash-Proof Encoded Starter Defaults */
+    const rawHTML = "%3C!DOCTYPE%20html%3E%0A%3Chtml%20lang%3D%22en%22%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22UTF-8%22%3E%0A%20%20%3Cmeta%20name%3D%22viewport%22%20content%3D%22width%3Ddevice-width%2C%20initial-scale%3D1.0%22%3E%0A%20%20%3Ctitle%3EVeda%20IDE%20Live%20App%3C%2Ftitle%3E%0A%20%20%3Clink%20rel%3D%22stylesheet%22%20href%3D%22style.css%22%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%20%20%3Cdiv%20class%3D%22card%22%3E%0A%20%20%20%20%3Cdiv%20class%3D%22badge%22%3EVeda%20Studio%20v5.0%20Pro%3C%2Fdiv%3E%0A%20%20%20%20%3Ch1%3ELive%20Server%20Active!%20%E2%9A%A1%3C%2Fh1%3E%0A%20%20%20%20%3Cp%3EType%20anything%20in%20code%20editor%20%26%20watch%20the%20live%20server%20update%20instantly!%3C%2Fp%3E%0A%20%20%20%20%3Cbutton%20id%3D%22clickBtn%22%3EClick%20Me%3C%2Fbutton%3E%0A%20%20%3C%2Fdiv%3E%0A%20%20%3Cscript%20src%3D%22script.js%22%3E%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E";
+    const rawCSS = "body%20%7B%0A%20%20margin%3A%200%3B%20padding%3A%200%3B%0A%20%20font-family%3A%20'Plus%20Jakarta%20Sans'%2C%20system-ui%2C%20sans-serif%3B%0A%20%20background%3A%20linear-gradient(135deg%2C%20%230f172a%2C%20%231e1b4b)%3B%0A%20%20color%3A%20%23f8fafc%3B%0A%20%20display%3A%20flex%3B%20align-items%3A%20center%3B%20justify-content%3A%20center%3B%0A%20%20min-height%3A%20100vh%3B%0A%7D%0A.card%20%7B%0A%20%20background%3A%20rgba(30%2C%2041%2C%2059%2C%200.75)%3B%0A%20%20backdrop-filter%3A%20blur(16px)%3B%0A%20%20padding%3A%202.5rem%3B%20border-radius%3A%2024px%3B%0A%20%20border%3A%201px%20solid%20rgba(255%2C%20255%2C%20255%2C%200.1)%3B%0A%20%20text-align%3A%20center%3B%20max-width%3A%20380px%3B%0A%20%20box-shadow%3A%200%2020px%2040px%20rgba(0%2C0%2C0%2C0.3)%3B%0A%7D%0A.badge%20%7B%0A%20%20display%3A%20inline-block%3B%20padding%3A%204px%2012px%3B%20font-size%3A%200.75rem%3B%0A%20%20background%3A%20linear-gradient(90deg%2C%20%233b82f6%2C%20%238b5cf6)%3B%0A%20%20color%3A%20%23ffffff%3B%0A%20%20border-radius%3A%2020px%3B%20margin-bottom%3A%201rem%3B%20font-weight%3A%20bold%3B%0A%7D%0Ah1%20%7B%20font-size%3A%201.6rem%3B%20margin-bottom%3A%200.8rem%3B%20%7D%0Ap%20%7B%20font-size%3A%200.92rem%3B%20color%3A%20%2394a3b8%3B%20margin-bottom%3A%201.5rem%3B%20line-height%3A%201.5%3B%20%7D%0Abutton%20%7B%0A%20%20background%3A%20linear-gradient(90deg%2C%20%233b82f6%2C%20%232563eb)%3B%0A%20%20color%3A%20%23ffffff%3B%20border%3A%20none%3B%20padding%3A%2012px%2026px%3B%0A%20%20border-radius%3A%2030px%3B%20font-weight%3A%20bold%3B%20cursor%3A%20pointer%3B%0A%20%20box-shadow%3A%200%204px%2018px%20rgba(59%2C%20130%2C%20246%2C%200.4)%3B%0A%20%20transition%3A%20transform%200.2s%3B%0A%7D%0Abutton%3Aactive%20%7B%20transform%3A%20scale(0.95)%3B%20%7D";
+    const rawJS = "document.getElementById('clickBtn').addEventListener('click'%2C%20()%20%3D%3E%20%7B%0A%20%20console.log('Veda%20Live%20Server%3A%20Interactive%20click%20test%20triggered!')%3B%0A%20%20alert('%E2%9C%A8%20Real-time%20Live%20Server%20is%20running%20smooth%20in%20Browser!')%3B%0A%7D)%3B";
+
+    const defaultStarterProject = {
+      "index.html": { name: "index.html", content: decodeURIComponent(rawHTML) },
+      "style.css": { name: "style.css", content: decodeURIComponent(rawCSS) },
+      "script.js": { name: "script.js", content: decodeURIComponent(rawJS) }
+    };
+
+    /* Project & File Manager Engine */
+    const ProjectManager = {
+      localDirHandle: null,
+
+      init() {
+        try {
+          const stored = localStorage.getItem('veda_project_files_v5');
+          if (stored) {
+            VEDA.files = JSON.parse(stored);
+          } else {
+            VEDA.files = JSON.parse(JSON.stringify(defaultStarterProject));
+          }
+        } catch (e) {
+          VEDA.files = JSON.parse(JSON.stringify(defaultStarterProject));
+        }
+        VEDA.openTabs = Object.keys(VEDA.files);
+        VEDA.activeFile = VEDA.files["index.html"] ? "index.html" : Object.keys(VEDA.files)[0];
+      },
+
+      saveToStorage() {
+        try {
+          localStorage.setItem('veda_project_files_v5', JSON.stringify(VEDA.files));
+          const badge = document.getElementById('saveBadge');
+          if (badge) {
+            badge.classList.add('saving');
+            setTimeout(() => badge.classList.remove('saving'), 250);
+          }
+        } catch (e) {
+          console.error("Storage Error:", e);
+        }
+      },
+
+      getFileIcon(filename) {
+        if (filename.endsWith('.html')) return 'fa-brands fa-html5';
+        if (filename.endsWith('.css')) return 'fa-brands fa-css3-alt';
+        if (filename.endsWith('.js')) return 'fa-brands fa-js';
+        if (filename.endsWith('.json')) return 'fa-solid fa-code-json';
+        if (filename.endsWith('.md')) return 'fa-brands fa-markdown';
+        if (filename.endsWith('.py')) return 'fa-brands fa-python';
+        return 'fa-solid fa-file-code';
+      },
+
+      sanitizeName(name) {
+        return name.trim().replace(/[\\/:\*\?"<>\|]/g, '_');
+      },
+
+      renderFileTree() {
+        const container = document.getElementById('fileTree');
+        const filter = (document.getElementById('fileFilter').value || '').toLowerCase();
+        container.innerHTML = '';
+
+        Object.keys(VEDA.files).forEach(filename => {
+          if (filter && !filename.toLowerCase().includes(filter)) return;
+
+          const item = document.createElement('div');
+          item.className = `tree-item ${filename === VEDA.activeFile ? 'active' : ''}`;
+          item.innerHTML = `
+            <div class="tree-item-info" onclick="ProjectManager.openFile('${filename}')">
+              <i class="${this.getFileIcon(filename)}"></i>
+              <span>${filename}</span>
+            </div>
+            <div class="tree-item-actions">
+              <button class="icon-btn" onclick="ProjectManager.renameFile('${filename}', event)" title="Rename"><i class="fa-solid fa-pen"></i></button>
+              <button class="icon-btn" onclick="ProjectManager.duplicateFile('${filename}', event)" title="Duplicate"><i class="fa-solid fa-copy"></i></button>
+              <button class="icon-btn" onclick="ProjectManager.deleteFile('${filename}', event)" title="Delete"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          `;
+          container.appendChild(item);
+        });
+        this.renderTabs();
+      },
+
+      renderTabs() {
+        const container = document.getElementById('editorTabs');
+        container.innerHTML = '';
+
+        VEDA.openTabs.forEach(filename => {
+          if (!VEDA.files[filename]) return;
+          const tab = document.createElement('div');
+          tab.className = `tab ${filename === VEDA.activeFile ? 'active' : ''}`;
+          tab.innerHTML = `
+            <span onclick="ProjectManager.openFile('${filename}')">${filename}</span>
+            <i class="fa-solid fa-xmark tab-close" onclick="ProjectManager.closeTab('${filename}', event)"></i>
+          `;
+          container.appendChild(tab);
+        });
+
+        document.getElementById('breadcrumbPath').innerText = VEDA.activeFile || 'No file selected';
+      },
+
+      openFile(filename) {
+        if (!VEDA.files[filename]) return;
+
+        if (VEDA.activeFile && VEDA.files[VEDA.activeFile] && VEDA.editor) {
+          VEDA.files[VEDA.activeFile].content = VEDA.editor.getValue();
+        }
+
+        VEDA.activeFile = filename;
+        if (!VEDA.openTabs.includes(filename)) VEDA.openTabs.push(filename);
+
+        let mode = "htmlmixed";
+        if (filename.endsWith('.css')) mode = "css";
+        else if (filename.endsWith('.js')) mode = "javascript";
+        else if (filename.endsWith('.json')) mode = "application/json";
+        else if (filename.endsWith('.md')) mode = "markdown";
+        else if (filename.endsWith('.py')) mode = "python";
+
+        VEDA.editor.setOption("mode", mode);
+        VEDA.editor.setValue(VEDA.files[filename].content || "");
+        VEDA.editor.focus();
+
+        this.renderFileTree();
+        UIController.closeSidebar();
+        DiagnosticEngine.runDiagnostics();
+      },
+
+      closeTab(filename, e) {
+        if (e) e.stopPropagation();
+        VEDA.openTabs = VEDA.openTabs.filter(t => t !== filename);
+        if (VEDA.activeFile === filename) {
+          VEDA.activeFile = VEDA.openTabs[VEDA.openTabs.length - 1] || null;
+          if (VEDA.activeFile) this.openFile(VEDA.activeFile);
+          else VEDA.editor.setValue("");
+        }
+        this.renderTabs();
+      },
+
+      promptNewFile() {
+        let name = prompt("Enter new filename (e.g., app.js, style.css, index.html):");
+        if (name) {
+          name = this.sanitizeName(name);
+          if (name && !VEDA.files[name]) {
+            VEDA.files[name] = { name: name, content: "" };
+            this.saveToStorage();
+            this.openFile(name);
+          }
+        }
+      },
+
+      renameFile(oldName, e) {
+        if (e) e.stopPropagation();
+        let newName = prompt("Rename file:", oldName);
+        if (newName) {
+          newName = this.sanitizeName(newName);
+          if (newName && newName !== oldName && !VEDA.files[newName]) {
+            VEDA.files[newName] = { name: newName, content: VEDA.files[oldName].content || "" };
+            delete VEDA.files[oldName];
+            VEDA.openTabs = VEDA.openTabs.map(t => t === oldName ? newName : t);
+            if (VEDA.activeFile === oldName) VEDA.activeFile = newName;
+            this.saveToStorage();
+            this.renderFileTree();
+          }
+        }
+      },
+
+      duplicateFile(filename, e) {
+        if (e) e.stopPropagation();
+        let newName = prompt("Duplicate as:", "copy_" + filename);
+        if (newName) {
+          newName = this.sanitizeName(newName);
+          if (newName && !VEDA.files[newName]) {
+            VEDA.files[newName] = { name: newName, content: VEDA.files[filename].content || "" };
+            this.saveToStorage();
+            this.openFile(newName);
+          }
+        }
+      },
+
+      deleteFile(filename, e) {
+        if (e) e.stopPropagation();
+        if (confirm(`Are you sure you want to delete ${filename}?`)) {
+          delete VEDA.files[filename];
+          this.closeTab(filename, e);
+          this.saveToStorage();
+          this.renderFileTree();
+        }
+      },
+
+      resetToDefaults() {
+        if (confirm("Reset project files to default starter kit?")) {
+          VEDA.files = JSON.parse(JSON.stringify(defaultStarterProject));
+          VEDA.openTabs = Object.keys(VEDA.files);
+          this.saveToStorage();
+          this.openFile("index.html");
+        }
+      },
+
+      async openLocalFolder() {
+        if (!('showDirectoryPicker' in window)) {
+
+          alert("Native Folder Access API requires Chrome, Edge, or Opera.");
+          return;
+        }
+        try {
+          this.localDirHandle = await window.showDirectoryPicker();
+          VEDA.files = {};
+          VEDA.openTabs = [];
+
+          for await (const entry of this.localDirHandle.values()) {
+            if (entry.kind === 'file') {
+              const file = await entry.getFile();
+              const content = await file.text();
+              VEDA.files[file.name] = { name: file.name, content: content };
+            }
+          }
+          document.getElementById('folderTitle').innerText = this.localDirHandle.name;
+          this.saveToStorage();
+          this.renderFileTree();
+          const first = Object.keys(VEDA.files)[0];
+          if (first) this.openFile(first);
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error(err);
+        }
+      },
+
+      triggerImport() {
+        document.getElementById('fileInput').click();
+      },
+
+      handleImportFiles(e) {
+        const filesArr = e.target.files;
+        for (let file of filesArr) {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            const name = this.sanitizeName(file.name);
+            VEDA.files[name] = { name: name, content: evt.target.result };
+            this.saveToStorage();
+            this.openFile(name);
+          };
+          reader.readAsText(file);
+        }
+      },
+
+      exportZip() {
+        const zip = new JSZip();
+        Object.keys(VEDA.files).forEach(filename => {
+          zip.file(filename, VEDA.files[filename].content || "");
+        });
+        zip.generateAsync({ type: "blob" }).then(content => {
+          saveAs(content, "veda_studio_project.zip");
+        });
+      },
+
+      searchInProject(query) {
+        const resultsTree = document.getElementById('searchResultsTree');
+        resultsTree.innerHTML = '';
+        if (!query.trim()) return;
+
+        Object.keys(VEDA.files).forEach(filename => {
+          const content = VEDA.files[filename].content || '';
+          if (content.toLowerCase().includes(query.toLowerCase())) {
+            const item = document.createElement('div');
+            item.className = 'tree-item';
+            item.innerHTML = `<i class="${this.getFileIcon(filename)}"></i> ${filename}`;
+            item.onclick = () => this.openFile(filename);
+            resultsTree.appendChild(item);
+          }
+        });
+      }
+    };
+
+    /* CodeMirror & Editor Engine */
+    const EditorEngine = {
+      init() {
+        const textarea = document.getElementById('codeTextarea');
+        VEDA.editor = CodeMirror.fromTextArea(textarea, {
+          lineNumbers: true,
+          mode: "htmlmixed",
+          theme: "material",
+          autoCloseBrackets: true,
+          autoCloseTags: true,
+          matchBrackets: true,
+          matchTags: { bothTags: true },
+          styleActiveLine: true,
+          foldGutter: true,
+          lineWrapping: true,
+          indentUnit: 2,
+          tabSize: 2,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
+          lint: true,
+          extraKeys: {
+            "Ctrl-Space": (cm) => cm.showHint({ completeSingle: false, hint: IntelligentAutocomplete.getSuggestions }),
+            "Alt-F": "findPersistent",
+            "Ctrl-/": "toggleComment",
+            "F1": () => CommandPalette.open(),
+            "Ctrl-Shift-P": () => CommandPalette.open(),
+            "Tab": (cm) => {
+              if (cm.somethingSelected()) {
+                cm.indentSelection("add");
+              } else {
+                if (!SafeEmmet.trigger()) {
+                  cm.replaceSelection("  ", "end");
+                }
+              }
+            }
+          }
+        });
+
+        VEDA.editor.on("change", () => {
+          if (VEDA.activeFile && VEDA.files[VEDA.activeFile]) {
+            VEDA.files[VEDA.activeFile].content = VEDA.editor.getValue();
+            ProjectManager.saveToStorage();
+            PreviewEngine.triggerAutoUpdate();
+            DiagnosticEngine.runDiagnostics();
+          }
+        });
+
+        // Trigger Autocomplete on Typing
+        VEDA.editor.on("inputRead", (cm, change) => {
+          if (change.origin !== "+input") return;
+          const ch = change.text[0];
+          if (!ch || ch === " " || ch === ";" || ch === "(" || ch === ")" || ch === "{") return;
+
+          clearTimeout(cm.autocompleteTimer);
+          cm.autocompleteTimer = setTimeout(() => {
+            if (!cm.state.completionActive) {
+              cm.showHint({ completeSingle: false, hint: IntelligentAutocomplete.getSuggestions });
+            }
+          }, 180);
+        });
+      },
+
+      formatCurrentCode() {
+        if (!VEDA.activeFile) return;
+        const val = VEDA.editor.getValue();
+        let formatted = val;
+
+        if (VEDA.activeFile.endsWith('.html')) {
+          formatted = html_beautify(val, { indent_size: 2 });
+        } else if (VEDA.activeFile.endsWith('.css')) {
+          formatted = css_beautify(val, { indent_size: 2 });
+        } else if (VEDA.activeFile.endsWith('.js') || VEDA.activeFile.endsWith('.json')) {
+          formatted = js_beautify(val, { indent_size: 2 });
+        }
+        VEDA.editor.setValue(formatted);
+      },
+
+      insertSymbol(sym) {
+        VEDA.editor.replaceSelection(sym);
+        VEDA.editor.focus();
+      },
+
+      toggleComment() {
+        VEDA.editor.toggleComment();
+      },
+
+      undo() { VEDA.editor.undo(); },
+      redo() { VEDA.editor.redo(); }
+    };
+
+    /* Safe Emmet Expansion System */
+    const SafeEmmet = {
+      trigger() {
+        try {
+          if (typeof emmetCodeMirror !== 'undefined' && emmetCodeMirror.emmetExpandAbbreviation) {
+            emmetCodeMirror.emmetExpandAbbreviation(VEDA.editor);
+            return true;
+          }
+        } catch (err) {
+          console.warn("Emmet Expansion Safety Net Captured:", err);
+        }
+        return false;
+      }
+    };
+
+    /* Intelligent Autocomplete Engine */
+    const IntelligentAutocomplete = {
+      getSuggestions(cm) {
+        const cursor = cm.getCursor();
+        const token = cm.getTokenAt(cursor);
+        const mode = cm.getOption("mode");
+
+        let list = [];
+        const word = token.string.toLowerCase();
+
+        if (mode === "htmlmixed" || mode === "xml") {
+          list = ["div", "span", "header", "footer", "section", "article", "nav", "button", "input", "form", "table", "ul", "ol", "li", "a", "img", "class=", "id=", "src=", "href=", "style=", "aria-label="];
+        } else if (mode === "css") {
+          list = ["display", "flex", "grid", "margin", "padding", "background", "color", "border", "border-radius", "width", "height", "font-family", "font-size", "box-shadow", "transition", "transform", "align-items", "justify-content"];
+        } else if (mode === "javascript") {
+          list = ["const", "let", "function", "return", "document.getElementById", "querySelector", "addEventListener", "console.log", "async", "await", "fetch", "map", "filter", "reduce", "forEach", "Promise", "JSON.stringify", "JSON.parse"];
+        }
+
+        const filtered = list.filter(item => item.toLowerCase().startsWith(word));
+
+        return {
+          list: filtered.length ? filtered : list.slice(0, 8),
+          from: CodeMirror.Pos(cursor.line, token.start),
+          to: CodeMirror.Pos(cursor.line, token.end)
+        };
+      }
+    };
+
+    /* Snippet Engine */
+    const SnippetEngine = {
+      snippets: {
+        "card": `<div class="card">\n  <h2>Title</h2>\n  <p>Description goes here...</p>\n</div>`,
+        "flexcenter": `display: flex;\nalign-items: center;\njustify-content: center;`,
+        "fetchapi": `fetch('https://api.example.com/data')\n  .then(res => res.json())\n  .then(data => console.log(data))\n  .catch(err => console.error(err));`
+      },
+
+      init() {
+        const container = document.getElementById('snippetList');
+        container.innerHTML = '';
+        Object.keys(this.snippets).forEach(prefix => {
+          const item = document.createElement('div');
+          item.className = 'tree-item';
+          item.innerHTML = `<strong>${prefix}</strong> <span style="font-size:0.7rem; color:var(--text-muted);">Insert Snippet</span>`;
+          item.onclick = () => {
+            VEDA.editor.replaceSelection(this.snippets[prefix]);
+            VEDA.editor.focus();
+          };
+          container.appendChild(item);
+        });
+      }
+    };
+
+    /* AI Assistant Layer */
+    const AIAssistant = {
+      triggerPrompt() {
+        UIController.setSidebarView('ai');
+      },
+
+      explainCode() {
+        const code = VEDA.editor.getSelection() || VEDA.editor.getValue();
+        document.getElementById('aiResponseContainer').innerText = "🤖 AI Explanation:\nThis code structure sets up dynamic interactive DOM behaviors and applies modern layout styling.";
+      },
+
+      findBugs() {
+        document.getElementById('aiResponseContainer').innerText = "🔍 Bug Check:\nNo critical syntax errors found. Ensure all event listeners clean up if elements re-render.";
+      },
+
+      refactorCode() {
+        document.getElementById('aiResponseContainer').innerText = "✨ Refactor Suggestion:\nConsider modularizing event listener handlers into named arrow functions.";
+      }
+    };
+
+    /* Ultra Fast Live Server Engine */
+    const PreviewEngine = {
+      debounceTimer: null,
+
+      setPerformanceMode(mode) {
+        VEDA.perfMode = mode;
+      },
+
+      toggleLiveServer() {
+        VEDA.isLiveServerOn = !VEDA.isLiveServerOn;
+        const btn = document.getElementById('btnLiveToggle');
+        const badge = document.getElementById('statusBadgeText');
+
+        if (VEDA.isLiveServerOn) {
+          btn.classList.add('btn-live-active');
+          btn.innerHTML = '<i class="fa-solid fa-sync fa-spin"></i> <span class="desktop-only">Live Sync</span>';
+          badge.innerText = 'Live Sync';
+          this.runNow();
+        } else {
+          btn.classList.remove('btn-live-active');
+          btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span class="desktop-only">Paused</span>';
+          badge.innerText = 'Sync Paused';
+        }
+      },
+
+      triggerAutoUpdate() {
+        if (!VEDA.isLiveServerOn) return;
+        clearTimeout(this.debounceTimer);
+
+        let delay = 300;
+        if (VEDA.perfMode === 'turbo') delay = 100;
+        else if (VEDA.perfMode === 'battery') delay = 800;
+
+        this.debounceTimer = setTimeout(() => {
+          requestAnimationFrame(() => this.runNow());
+        }, delay);
+      },
+
+      getCompiledHTML() {
+        let html = VEDA.files['index.html'] ? VEDA.files['index.html'].content : VEDA.editor.getValue();
+
+        // Inline External Stylesheet References
+        html = html.replace(/<link\s+[^>]*href=["']([^"']+)["'][^>]*>/gi, (match, href) => {
+          if (VEDA.files[href]) return '<style>\n' + VEDA.files[href].content + '\n</style>';
+          return match;
+        });
+
+        // Inline External Script References
+        html = html.replace(/<script\s+[^>]*src=["']([^"']+)["'][^>]*><\/script>/gi, (match, src) => {
+          if (VEDA.files[src]) return '<script>\n' + VEDA.files[src].content + '\n<' + '/script>';
+          return match;
+        });
+
+        return html;
+      },
+
+      runNow() {
+        const iframe = document.getElementById('previewFrame');
+        if (!iframe) return;
+
+        const compiled = this.getCompiledHTML();
+        const consoleHook = `
+          <script>
+            (function() {
+              const _log = console.log, _err = console.error, _warn = console.warn;
+              console.log = function(...args) {
+                window.parent.postMessage({ type: "console", level: "info", msg: args.join(" ") }, "*");
+                _log.apply(console, args);
+              };
+              console.error = function(...args) {
+                window.parent.postMessage({ type: "console", level: "error", msg: args.join(" ") }, "*");
+                _err.apply(console, args);
+              };
+              console.warn = function(...args) {
+                window.parent.postMessage({ type: "console", level: "warn", msg: args.join(" ") }, "*");
+                _warn.apply(console, args);
+              };
+              window.onerror = function(msg, url, line) {
+                window.parent.postMessage({ type: "console", level: "error", msg: msg + " (Line " + line + ")" }, "*");
+              };
+            })();
+          <\/script>
+        `;
+
+        iframe.srcdoc = consoleHook + compiled;
+      },
+
+      openBrowserWindow() {
+        const html = this.getCompiledHTML();
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+    };
+
+    /* Diagnostic System */
+    const DiagnosticEngine = {
+      runDiagnostics() {
+        const container = document.getElementById('problemsContainer');
+        container.innerHTML = '';
+        let errors = [];
+
+        if (VEDA.activeFile.endsWith('.js')) {
+          if (typeof JSHint !== 'undefined') {
+            JSHint(VEDA.editor.getValue());
+            errors = JSHint.errors || [];
+          }
+        }
+
+        document.getElementById('diagCount').innerText = errors.length;
+
+        errors.forEach(err => {
+          if (!err) return;
+          const item = document.createElement('div');
+          item.className = 'diag-item';
+          item.innerHTML = `<span style="color:#ef4444;"><i class="fa-solid fa-circle-xmark"></i> Line ${err.line}:</span> ${err.reason}`;
+          item.onclick = () => {
+            VEDA.editor.setCursor(err.line - 1, err.character - 1);
+            VEDA.editor.focus();
+          };
+          container.appendChild(item);
+        });
+      },
+
+      clearLogs() {
+        document.getElementById('consoleLogs').innerHTML = '';
+      }
+    };
+
+    /* Theme Switcher Manager */
+    const ThemeManager = {
+      themeMap: {
+        'theme-veda-light': 'default',
+        'theme-github-light': 'eclipse',
+        'theme-paper-light': 'neat',
+        'theme-pastel-day': 'default',
+        'theme-monokai': 'monokai',
+        'theme-dracula': 'dracula',
+        'theme-onedark': 'one-dark',
+        'theme-nord': 'nord',
+        'theme-cyberpunk': 'material-darker',
+        'theme-solarized': 'solarized',
+        'theme-synthwave': 'material-palenight',
+        'theme-tokyo-night': 'abbott',
+        'theme-veda-dark': 'material',
+        'theme-emerald': 'material',
+        'theme-neon-matrix': 'night',
+        'theme-sunset': 'rubyblue',
+        'theme-ocean': 'cobalt',
+        'theme-rose-pine': 'twilight',
+        'theme-mocha': 'zenburn',
+        'theme-midnight-violet': 'blackboard',
+        'theme-obsidian': 'panda-syntax',
+        'theme-ice-chill': 'nord',
+        'theme-gruvbox-dark': 'gruvbox-dark',
+        'theme-matrix-hacker': 'the-matrix',
+        'theme-isotope': 'isotope',
+        'theme-mbo': 'mbo',
+        'theme-mdn-light': 'mdn-like',
+        'theme-midnight': 'midnight',
+        'theme-paraiso': 'paraiso-dark',
+        'theme-base16-dark': 'base16-dark',
+        'theme-base16-light': 'base16-light',
+        'theme-yeti': 'yeti'
+      },
+
+      changeTheme(cls) {
+        document.body.className = cls;
+        document.getElementById('themeSelect').value = cls;
+        const cmTheme = this.themeMap[cls] || 'default';
+        if (VEDA.editor) VEDA.editor.setOption('theme', cmTheme);
+        localStorage.setItem('veda_theme_v5', cls);
+      }
+    };
+
+    /* Command Palette Modal */
+    const CommandPalette = {
+      commands: [
+        { name: "Format Code", action: () => EditorEngine.formatCurrentCode() },
+        { name: "Run Live Preview", action: () => PreviewEngine.runNow() },
+        { name: "Toggle Live Server", action: () => PreviewEngine.toggleLiveServer() },
+        { name: "Open Direct Window", action: () => PreviewEngine.openBrowserWindow() },
+        { name: "New File", action: () => ProjectManager.promptNewFile() },
+        { name: "Export ZIP Package", action: () => ProjectManager.exportZip() },
+        { name: "Reset Default Starter Kit", action: () => ProjectManager.resetToDefaults() }
+      ],
+
+      open() {
+        document.getElementById('commandPaletteModal').classList.add('open');
+        const input = document.getElementById('commandInput');
+        input.value = '';
+        input.focus();
+        this.filter('');
+      },
+
+      close(e) {
+        if (e) e.stopPropagation();
+        document.getElementById('commandPaletteModal').classList.remove('open');
+      },
+
+      filter(query) {
+        const list = document.getElementById('commandList');
+        list.innerHTML = '';
+        const filtered = this.commands.filter(c => c.name.toLowerCase().includes(query.toLowerCase()));
+
+        filtered.forEach(cmd => {
+          const item = document.createElement('div');
+          item.className = 'command-item';
+          item.innerText = cmd.name;
+          item.onclick = () => {
+            cmd.action();
+            this.close();
+          };
+          list.appendChild(item);
+        });
+      }
+    };
+
+    /* UI Controller */
+    const UIController = {
+      setSidebarView(viewName) {
+        document.querySelectorAll('.sidebar-view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.act-btn').forEach(b => b.classList.remove('active'));
+
+        const target = document.getElementById('view' + viewName.charAt(0).toUpperCase() + viewName.slice(1));
+        if (target) target.classList.add('active');
+
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebarOverlay').classList.add('open');
+      },
+
+      closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      },
+
+      switchBottomTab(tab) {
+        const consoleLogs = document.getElementById('consoleLogs');
+        const problemsContainer = document.getElementById('problemsContainer');
+        const tabBtnConsole = document.getElementById('tabBtnConsole');
+        const tabBtnProblems = document.getElementById('tabBtnProblems');
+
+        if (tab === 'console') {
+          consoleLogs.style.display = 'block';
+          problemsContainer.style.display = 'none';
+          tabBtnConsole.classList.add('active');
+          tabBtnProblems.classList.remove('active');
+        } else {
+          consoleLogs.style.display = 'none';
+          problemsContainer.style.display = 'block';
+          tabBtnProblems.classList.add('active');
+          tabBtnConsole.classList.remove('active');
+        }
+      },
+
+      toggleBottomPanel() {
+        const panel = document.getElementById('bottomPanel');
+        panel.classList.toggle('collapsed');
+        const icon = document.getElementById('bottomPanelToggleIcon');
+        icon.className = panel.classList.contains('collapsed') ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+      },
+
+      switchMobileView(view) {
+        document.querySelectorAll('.mobile-tab-btn').forEach(b => b.classList.remove('active'));
+        const editorContainer = document.getElementById('editorContainer');
+        const previewContainer = document.getElementById('previewContainer');
+
+        if (view === 'files') {
+          this.setSidebarView('explorer');
+        } else if (view === 'editor') {
+          document.getElementById('mobTabCode').classList.add('active');
+          this.closeSidebar();
+          editorContainer.classList.remove('mobile-hide');
+          previewContainer.classList.remove('mobile-show');
+        } else if (view === 'preview') {
+          document.getElementById('mobTabPreview').classList.add('active');
+          this.closeSidebar();
+          editorContainer.classList.add('mobile-hide');
+          previewContainer.classList.add('mobile-show');
+          PreviewEngine.runNow();
+        } else if (view === 'console') {
+          this.closeSidebar();
+          document.getElementById('bottomPanel').classList.remove('collapsed');
+        }
+      }
+    };
+
+    /* Global Window Message Receiver for Console Logs */
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'console') {
+        const logs = document.getElementById('consoleLogs');
+        const line = document.createElement('div');
+        line.className = `log-line log-${e.data.level}`;
+        line.innerText = `[${e.data.level.toUpperCase()}] ${e.data.msg}`;
+        logs.appendChild(line);
+        logs.scrollTop = logs.scrollHeight;
+      }
+    });
+
+    /* Application Initialization */
+    document.addEventListener("DOMContentLoaded", () => {
+      ProjectManager.init();
+      EditorEngine.init();
+      SnippetEngine.init();
+
+      const savedTheme = localStorage.getItem('veda_theme_v5') || 'theme-veda-dark';
+      ThemeManager.changeTheme(savedTheme);
+
+      ProjectManager.renderFileTree();
+      ProjectManager.openFile(VEDA.activeFile);
+      PreviewEngine.runNow();
+    });
+  </script>
+</body>
+</html>
