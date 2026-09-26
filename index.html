@@ -720,777 +720,588 @@
   </div>
 
   <script>
-    /* Global Application State Namespace */
+    /* =========================================================
+       VEDA STUDIO v6.0 — Editor Core
+       Focus: deterministic state, real autocomplete, snippets,
+       Emmet-style expansion, diagnostics, responsive UX.
+       ========================================================= */
     const VEDA = {
-      version: "5.0 Pro",
+      version: "6.0 Pro",
       editor: null,
       activeFile: "index.html",
       openTabs: [],
       files: {},
-      snippets: {},
       isLiveServerOn: true,
-      perfMode: "balanced"
+      perfMode: "balanced",
+      storageKey: "veda_project_files_v6",
+      themeKey: "veda_theme_v6"
     };
-
-    /* Crash-Proof Encoded Starter Defaults */
-    const rawHTML = "%3C!DOCTYPE%20html%3E%0A%3Chtml%20lang%3D%22en%22%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22UTF-8%22%3E%0A%20%20%3Cmeta%20name%3D%22viewport%22%20content%3D%22width%3Ddevice-width%2C%20initial-scale%3D1.0%22%3E%0A%20%20%3Ctitle%3EVeda%20IDE%20Live%20App%3C%2Ftitle%3E%0A%20%20%3Clink%20rel%3D%22stylesheet%22%20href%3D%22style.css%22%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%20%20%3Cdiv%20class%3D%22card%22%3E%0A%20%20%20%20%3Cdiv%20class%3D%22badge%22%3EVeda%20Studio%20v5.0%20Pro%3C%2Fdiv%3E%0A%20%20%20%20%3Ch1%3ELive%20Server%20Active!%20%E2%9A%A1%3C%2Fh1%3E%0A%20%20%20%20%3Cp%3EType%20anything%20in%20code%20editor%20%26%20watch%20the%20live%20server%20update%20instantly!%3C%2Fp%3E%0A%20%20%20%20%3Cbutton%20id%3D%22clickBtn%22%3EClick%20Me%3C%2Fbutton%3E%0A%20%20%3C%2Fdiv%3E%0A%20%20%3Cscript%20src%3D%22script.js%22%3E%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E";
-    const rawCSS = "body%20%7B%0A%20%20margin%3A%200%3B%20padding%3A%200%3B%0A%20%20font-family%3A%20'Plus%20Jakarta%20Sans'%2C%20system-ui%2C%20sans-serif%3B%0A%20%20background%3A%20linear-gradient(135deg%2C%20%230f172a%2C%20%231e1b4b)%3B%0A%20%20color%3A%20%23f8fafc%3B%0A%20%20display%3A%20flex%3B%20align-items%3A%20center%3B%20justify-content%3A%20center%3B%0A%20%20min-height%3A%20100vh%3B%0A%7D%0A.card%20%7B%0A%20%20background%3A%20rgba(30%2C%2041%2C%2059%2C%200.75)%3B%0A%20%20backdrop-filter%3A%20blur(16px)%3B%0A%20%20padding%3A%202.5rem%3B%20border-radius%3A%2024px%3B%0A%20%20border%3A%201px%20solid%20rgba(255%2C%20255%2C%20255%2C%200.1)%3B%0A%20%20text-align%3A%20center%3B%20max-width%3A%20380px%3B%0A%20%20box-shadow%3A%200%2020px%2040px%20rgba(0%2C0%2C0%2C0.3)%3B%0A%7D%0A.badge%20%7B%0A%20%20display%3A%20inline-block%3B%20padding%3A%204px%2012px%3B%20font-size%3A%200.75rem%3B%0A%20%20background%3A%20linear-gradient(90deg%2C%20%233b82f6%2C%20%238b5cf6)%3B%0A%20%20color%3A%20%23ffffff%3B%0A%20%20border-radius%3A%2020px%3B%20margin-bottom%3A%201rem%3B%20font-weight%3A%20bold%3B%0A%7D%0Ah1%20%7B%20font-size%3A%201.6rem%3B%20margin-bottom%3A%200.8rem%3B%20%7D%0Ap%20%7B%20font-size%3A%200.92rem%3B%20color%3A%20%2394a3b8%3B%20margin-bottom%3A%201.5rem%3B%20line-height%3A%201.5%3B%20%7D%0Abutton%20%7B%0A%20%20background%3A%20linear-gradient(90deg%2C%20%233b82f6%2C%20%232563eb)%3B%0A%20%20color%3A%20%23ffffff%3B%20border%3A%20none%3B%20padding%3A%2012px%2026px%3B%0A%20%20border-radius%3A%2030px%3B%20font-weight%3A%20bold%3B%20cursor%3A%20pointer%3B%0A%20%20box-shadow%3A%200%204px%2018px%20rgba(59%2C%20130%2C%20246%2C%200.4)%3B%0A%20%20transition%3A%20transform%200.2s%3B%0A%7D%0Abutton%3Aactive%20%7B%20transform%3A%20scale(0.95)%3B%20%7D";
-    const rawJS = "document.getElementById('clickBtn').addEventListener('click'%2C%20()%20%3D%3E%20%7B%0A%20%20console.log('Veda%20Live%20Server%3A%20Interactive%20click%20test%20triggered!')%3B%0A%20%20alert('%E2%9C%A8%20Real-time%20Live%20Server%20is%20running%20smooth%20in%20Browser!')%3B%0A%7D)%3B";
 
     const defaultStarterProject = {
-      "index.html": { name: "index.html", content: decodeURIComponent(rawHTML) },
-      "style.css": { name: "style.css", content: decodeURIComponent(rawCSS) },
-      "script.js": { name: "script.js", content: decodeURIComponent(rawJS) }
+      "index.html": { name: "index.html", content: `<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Veda Studio</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <main class="card">\n    <h1>Hello from Veda Studio</h1>\n    <p>Edit the files and watch the preview update.</p>\n    <button id="clickBtn">Click me</button>\n  </main>\n  <script src="script.js"><\/script>\n</body>\n</html>` },
+      "style.css": { name: "style.css", content: `body {\n  margin: 0;\n  min-height: 100vh;\n  display: grid;\n  place-items: center;\n  font-family: system-ui, sans-serif;\n  background: #0f172a;\n  color: #f8fafc;\n}\n.card {\n  width: min(90vw, 520px);\n  padding: 32px;\n  border-radius: 20px;\n  background: #1e293b;\n}` },
+      "script.js": { name: "script.js", content: `const button = document.getElementById('clickBtn');\nbutton?.addEventListener('click', () => {\n  console.log('Veda Studio is working!');\n});` }
     };
 
-    /* Project & File Manager Engine */
-    const ProjectManager = {
-      localDirHandle: null,
-
-      init() {
-        try {
-          const stored = localStorage.getItem('veda_project_files_v5');
-          if (stored) {
-            VEDA.files = JSON.parse(stored);
-          } else {
-            VEDA.files = JSON.parse(JSON.stringify(defaultStarterProject));
-          }
-        } catch (e) {
-          VEDA.files = JSON.parse(JSON.stringify(defaultStarterProject));
-        }
-        VEDA.openTabs = Object.keys(VEDA.files);
-        VEDA.activeFile = VEDA.files["index.html"] ? "index.html" : Object.keys(VEDA.files)[0];
-      },
-
-      saveToStorage() {
-        try {
-          localStorage.setItem('veda_project_files_v5', JSON.stringify(VEDA.files));
-          const badge = document.getElementById('saveBadge');
-          if (badge) {
-            badge.classList.add('saving');
-            setTimeout(() => badge.classList.remove('saving'), 250);
-          }
-        } catch (e) {
-          console.error("Storage Error:", e);
-        }
-      },
-
-      getFileIcon(filename) {
-        if (filename.endsWith('.html')) return 'fa-brands fa-html5';
-        if (filename.endsWith('.css')) return 'fa-brands fa-css3-alt';
-        if (filename.endsWith('.js')) return 'fa-brands fa-js';
-        if (filename.endsWith('.json')) return 'fa-solid fa-code-json';
-        if (filename.endsWith('.md')) return 'fa-brands fa-markdown';
-        if (filename.endsWith('.py')) return 'fa-brands fa-python';
-        return 'fa-solid fa-file-code';
-      },
-
-      sanitizeName(name) {
-        return name.trim().replace(/[\\/:\*\?"<>\|]/g, '_');
-      },
-
-      renderFileTree() {
-        const container = document.getElementById('fileTree');
-        const filter = (document.getElementById('fileFilter').value || '').toLowerCase();
-        container.innerHTML = '';
-
-        Object.keys(VEDA.files).forEach(filename => {
-          if (filter && !filename.toLowerCase().includes(filter)) return;
-
-          const item = document.createElement('div');
-          item.className = `tree-item ${filename === VEDA.activeFile ? 'active' : ''}`;
-          item.innerHTML = `
-            <div class="tree-item-info" onclick="ProjectManager.openFile('${filename}')">
-              <i class="${this.getFileIcon(filename)}"></i>
-              <span>${filename}</span>
-            </div>
-            <div class="tree-item-actions">
-              <button class="icon-btn" onclick="ProjectManager.renameFile('${filename}', event)" title="Rename"><i class="fa-solid fa-pen"></i></button>
-              <button class="icon-btn" onclick="ProjectManager.duplicateFile('${filename}', event)" title="Duplicate"><i class="fa-solid fa-copy"></i></button>
-              <button class="icon-btn" onclick="ProjectManager.deleteFile('${filename}', event)" title="Delete"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          `;
-          container.appendChild(item);
-        });
-        this.renderTabs();
-      },
-
-      renderTabs() {
-        const container = document.getElementById('editorTabs');
-        container.innerHTML = '';
-
-        VEDA.openTabs.forEach(filename => {
-          if (!VEDA.files[filename]) return;
-          const tab = document.createElement('div');
-          tab.className = `tab ${filename === VEDA.activeFile ? 'active' : ''}`;
-          tab.innerHTML = `
-            <span onclick="ProjectManager.openFile('${filename}')">${filename}</span>
-            <i class="fa-solid fa-xmark tab-close" onclick="ProjectManager.closeTab('${filename}', event)"></i>
-          `;
-          container.appendChild(tab);
-        });
-
-        document.getElementById('breadcrumbPath').innerText = VEDA.activeFile || 'No file selected';
-      },
-
-      openFile(filename) {
-        if (!VEDA.files[filename]) return;
-
-        if (VEDA.activeFile && VEDA.files[VEDA.activeFile] && VEDA.editor) {
-          VEDA.files[VEDA.activeFile].content = VEDA.editor.getValue();
-        }
-
-        VEDA.activeFile = filename;
-        if (!VEDA.openTabs.includes(filename)) VEDA.openTabs.push(filename);
-
-        let mode = "htmlmixed";
-        if (filename.endsWith('.css')) mode = "css";
-        else if (filename.endsWith('.js')) mode = "javascript";
-        else if (filename.endsWith('.json')) mode = "application/json";
-        else if (filename.endsWith('.md')) mode = "markdown";
-        else if (filename.endsWith('.py')) mode = "python";
-
-        VEDA.editor.setOption("mode", mode);
-        VEDA.editor.setValue(VEDA.files[filename].content || "");
-        VEDA.editor.focus();
-
-        this.renderFileTree();
-        UIController.closeSidebar();
-        DiagnosticEngine.runDiagnostics();
-      },
-
-      closeTab(filename, e) {
-        if (e) e.stopPropagation();
-        VEDA.openTabs = VEDA.openTabs.filter(t => t !== filename);
-        if (VEDA.activeFile === filename) {
-          VEDA.activeFile = VEDA.openTabs[VEDA.openTabs.length - 1] || null;
-          if (VEDA.activeFile) this.openFile(VEDA.activeFile);
-          else VEDA.editor.setValue("");
-        }
-        this.renderTabs();
-      },
-
-      promptNewFile() {
-        let name = prompt("Enter new filename (e.g., app.js, style.css, index.html):");
-        if (name) {
-          name = this.sanitizeName(name);
-          if (name && !VEDA.files[name]) {
-            VEDA.files[name] = { name: name, content: "" };
-            this.saveToStorage();
-            this.openFile(name);
-          }
-        }
-      },
-
-      renameFile(oldName, e) {
-        if (e) e.stopPropagation();
-        let newName = prompt("Rename file:", oldName);
-        if (newName) {
-          newName = this.sanitizeName(newName);
-          if (newName && newName !== oldName && !VEDA.files[newName]) {
-            VEDA.files[newName] = { name: newName, content: VEDA.files[oldName].content || "" };
-            delete VEDA.files[oldName];
-            VEDA.openTabs = VEDA.openTabs.map(t => t === oldName ? newName : t);
-            if (VEDA.activeFile === oldName) VEDA.activeFile = newName;
-            this.saveToStorage();
-            this.renderFileTree();
-          }
-        }
-      },
-
-      duplicateFile(filename, e) {
-        if (e) e.stopPropagation();
-        let newName = prompt("Duplicate as:", "copy_" + filename);
-        if (newName) {
-          newName = this.sanitizeName(newName);
-          if (newName && !VEDA.files[newName]) {
-            VEDA.files[newName] = { name: newName, content: VEDA.files[filename].content || "" };
-            this.saveToStorage();
-            this.openFile(newName);
-          }
-        }
-      },
-
-      deleteFile(filename, e) {
-        if (e) e.stopPropagation();
-        if (confirm(`Are you sure you want to delete ${filename}?`)) {
-          delete VEDA.files[filename];
-          this.closeTab(filename, e);
-          this.saveToStorage();
-          this.renderFileTree();
-        }
-      },
-
-      resetToDefaults() {
-        if (confirm("Reset project files to default starter kit?")) {
-          VEDA.files = JSON.parse(JSON.stringify(defaultStarterProject));
-          VEDA.openTabs = Object.keys(VEDA.files);
-          this.saveToStorage();
-          this.openFile("index.html");
-        }
-      },
-
-      async openLocalFolder() {
-        if (!('showDirectoryPicker' in window)) {
-
-          alert("Native Folder Access API requires Chrome, Edge, or Opera.");
-          return;
-        }
-        try {
-          this.localDirHandle = await window.showDirectoryPicker();
-          VEDA.files = {};
-          VEDA.openTabs = [];
-
-          for await (const entry of this.localDirHandle.values()) {
-            if (entry.kind === 'file') {
-              const file = await entry.getFile();
-              const content = await file.text();
-              VEDA.files[file.name] = { name: file.name, content: content };
-            }
-          }
-          document.getElementById('folderTitle').innerText = this.localDirHandle.name;
-          this.saveToStorage();
-          this.renderFileTree();
-          const first = Object.keys(VEDA.files)[0];
-          if (first) this.openFile(first);
-        } catch (err) {
-          if (err.name !== 'AbortError') console.error(err);
-        }
-      },
-
-      triggerImport() {
-        document.getElementById('fileInput').click();
-      },
-
-      handleImportFiles(e) {
-        const filesArr = e.target.files;
-        for (let file of filesArr) {
-          const reader = new FileReader();
-          reader.onload = (evt) => {
-            const name = this.sanitizeName(file.name);
-            VEDA.files[name] = { name: name, content: evt.target.result };
-            this.saveToStorage();
-            this.openFile(name);
-          };
-          reader.readAsText(file);
-        }
-      },
-
-      exportZip() {
-        const zip = new JSZip();
-        Object.keys(VEDA.files).forEach(filename => {
-          zip.file(filename, VEDA.files[filename].content || "");
-        });
-        zip.generateAsync({ type: "blob" }).then(content => {
-          saveAs(content, "veda_studio_project.zip");
-        });
-      },
-
-      searchInProject(query) {
-        const resultsTree = document.getElementById('searchResultsTree');
-        resultsTree.innerHTML = '';
-        if (!query.trim()) return;
-
-        Object.keys(VEDA.files).forEach(filename => {
-          const content = VEDA.files[filename].content || '';
-          if (content.toLowerCase().includes(query.toLowerCase())) {
-            const item = document.createElement('div');
-            item.className = 'tree-item';
-            item.innerHTML = `<i class="${this.getFileIcon(filename)}"></i> ${filename}`;
-            item.onclick = () => this.openFile(filename);
-            resultsTree.appendChild(item);
-          }
-        });
-      }
-    };
-
-    /* CodeMirror & Editor Engine */
-    const EditorEngine = {
-      init() {
-        const textarea = document.getElementById('codeTextarea');
-        VEDA.editor = CodeMirror.fromTextArea(textarea, {
-          lineNumbers: true,
-          mode: "htmlmixed",
-          theme: "material",
-          autoCloseBrackets: true,
-          autoCloseTags: true,
-          matchBrackets: true,
-          matchTags: { bothTags: true },
-          styleActiveLine: true,
-          foldGutter: true,
-          lineWrapping: true,
-          indentUnit: 2,
-          tabSize: 2,
-          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
-          lint: true,
-          extraKeys: {
-            "Ctrl-Space": (cm) => cm.showHint({ completeSingle: false, hint: IntelligentAutocomplete.getSuggestions }),
-            "Alt-F": "findPersistent",
-            "Ctrl-/": "toggleComment",
-            "F1": () => CommandPalette.open(),
-            "Ctrl-Shift-P": () => CommandPalette.open(),
-            "Tab": (cm) => {
-              if (cm.somethingSelected()) {
-                cm.indentSelection("add");
-              } else {
-                if (!SafeEmmet.trigger()) {
-                  cm.replaceSelection("  ", "end");
-                }
-              }
-            }
-          }
-        });
-
-        VEDA.editor.on("change", () => {
-          if (VEDA.activeFile && VEDA.files[VEDA.activeFile]) {
-            VEDA.files[VEDA.activeFile].content = VEDA.editor.getValue();
-            ProjectManager.saveToStorage();
-            PreviewEngine.triggerAutoUpdate();
-            DiagnosticEngine.runDiagnostics();
-          }
-        });
-
-        // Trigger Autocomplete on Typing
-        VEDA.editor.on("inputRead", (cm, change) => {
-          if (change.origin !== "+input") return;
-          const ch = change.text[0];
-          if (!ch || ch === " " || ch === ";" || ch === "(" || ch === ")" || ch === "{") return;
-
-          clearTimeout(cm.autocompleteTimer);
-          cm.autocompleteTimer = setTimeout(() => {
-            if (!cm.state.completionActive) {
-              cm.showHint({ completeSingle: false, hint: IntelligentAutocomplete.getSuggestions });
-            }
-          }, 180);
-        });
-      },
-
-      formatCurrentCode() {
-        if (!VEDA.activeFile) return;
-        const val = VEDA.editor.getValue();
-        let formatted = val;
-
-        if (VEDA.activeFile.endsWith('.html')) {
-          formatted = html_beautify(val, { indent_size: 2 });
-        } else if (VEDA.activeFile.endsWith('.css')) {
-          formatted = css_beautify(val, { indent_size: 2 });
-        } else if (VEDA.activeFile.endsWith('.js') || VEDA.activeFile.endsWith('.json')) {
-          formatted = js_beautify(val, { indent_size: 2 });
-        }
-        VEDA.editor.setValue(formatted);
-      },
-
-      insertSymbol(sym) {
-        VEDA.editor.replaceSelection(sym);
-        VEDA.editor.focus();
-      },
-
-      toggleComment() {
-        VEDA.editor.toggleComment();
-      },
-
-      undo() { VEDA.editor.undo(); },
-      redo() { VEDA.editor.redo(); }
-    };
-
-    /* Safe Emmet Expansion System */
-    const SafeEmmet = {
-      trigger() {
-        try {
-          if (typeof emmetCodeMirror !== 'undefined' && emmetCodeMirror.emmetExpandAbbreviation) {
-            emmetCodeMirror.emmetExpandAbbreviation(VEDA.editor);
-            return true;
-          }
-        } catch (err) {
-          console.warn("Emmet Expansion Safety Net Captured:", err);
-        }
-        return false;
-      }
-    };
-
-    /* Intelligent Autocomplete Engine */
-    const IntelligentAutocomplete = {
-      getSuggestions(cm) {
-        const cursor = cm.getCursor();
-        const token = cm.getTokenAt(cursor);
-        const mode = cm.getOption("mode");
-
-        let list = [];
-        const word = token.string.toLowerCase();
-
-        if (mode === "htmlmixed" || mode === "xml") {
-          list = ["div", "span", "header", "footer", "section", "article", "nav", "button", "input", "form", "table", "ul", "ol", "li", "a", "img", "class=", "id=", "src=", "href=", "style=", "aria-label="];
-        } else if (mode === "css") {
-          list = ["display", "flex", "grid", "margin", "padding", "background", "color", "border", "border-radius", "width", "height", "font-family", "font-size", "box-shadow", "transition", "transform", "align-items", "justify-content"];
-        } else if (mode === "javascript") {
-          list = ["const", "let", "function", "return", "document.getElementById", "querySelector", "addEventListener", "console.log", "async", "await", "fetch", "map", "filter", "reduce", "forEach", "Promise", "JSON.stringify", "JSON.parse"];
-        }
-
-        const filtered = list.filter(item => item.toLowerCase().startsWith(word));
-
-        return {
-          list: filtered.length ? filtered : list.slice(0, 8),
-          from: CodeMirror.Pos(cursor.line, token.start),
-          to: CodeMirror.Pos(cursor.line, token.end)
-        };
-      }
-    };
-
-    /* Snippet Engine */
     const SnippetEngine = {
       snippets: {
-        "card": `<div class="card">\n  <h2>Title</h2>\n  <p>Description goes here...</p>\n</div>`,
+        "html5": `<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Document</title>\n</head>\n<body>\n  $0\n</body>\n</html>`,
+        "div": `<div>$0</div>`,
+        "card": `<div class="card">\n  <h2>$1</h2>\n  <p>$2</p>\n</div>`,
+        "button": `<button type="button">$0</button>`,
         "flexcenter": `display: flex;\nalign-items: center;\njustify-content: center;`,
-        "fetchapi": `fetch('https://api.example.com/data')\n  .then(res => res.json())\n  .then(data => console.log(data))\n  .catch(err => console.error(err));`
+        "grid": `display: grid;\ngrid-template-columns: repeat(3, minmax(0, 1fr));\ngap: 1rem;`,
+        "fetch": `fetch('$1')\n  .then(response => response.json())\n  .then(data => {\n    console.log(data);\n  })\n  .catch(error => console.error(error));`,
+        "log": `console.log($0);`,
+        "fn": `function $1($2) {\n  $0\n}`,
+        "arrow": `const $1 = ($2) => {\n  $0\n};`
+      },
+
+      getForFile(filename) {
+        const ext = (filename || '').split('.').pop().toLowerCase();
+        if (ext === 'html' || ext === 'htm') return ['html5', 'div', 'button', 'card'];
+        if (ext === 'css') return ['flexcenter', 'grid'];
+        if (ext === 'js' || ext === 'ts') return ['fetch', 'log', 'fn', 'arrow'];
+        return Object.keys(this.snippets);
+      },
+
+      currentPrefix(cm) {
+        const cursor = cm.getCursor();
+        const line = cm.getLine(cursor.line).slice(0, cursor.ch);
+        const match = line.match(/[A-Za-z0-9_.$#>+*:-]+$/);
+        return { value: match ? match[0] : '', start: cursor.ch - (match ? match[0].length : 0), end: cursor.ch };
+      },
+
+      expand(name) {
+        const value = this.snippets[name];
+        if (!value || !VEDA.editor) return false;
+        const cm = VEDA.editor;
+        const range = this.currentPrefix(cm);
+        const from = CodeMirror.Pos(cm.getCursor().line, range.start);
+        const to = CodeMirror.Pos(cm.getCursor().line, range.end);
+        const expanded = this.prepareSnippet(value);
+        cm.replaceRange(expanded.text, from, to, '+snippet');
+        if (expanded.cursor) cm.setCursor(cm.posFromIndex(cm.indexFromPos(from) + expanded.cursor));
+        else cm.setCursor(cm.getCursor());
+        cm.focus();
+        return true;
+      },
+
+      prepareSnippet(value) {
+        let cursorIndex = null;
+        let counter = 0;
+        const text = value.replace(/\$(\d+)/g, (m, n) => {
+          if (n === '0') cursorIndex = counter;
+          return '';
+        });
+        counter = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value[i] === '\\' && value[i + 1]) { i++; counter++; continue; }
+          if (value[i] === '$' && /\d/.test(value[i + 1] || '')) { i++; while (/\d/.test(value[i + 1] || '')) i++; continue; }
+          counter++;
+        }
+        return { text, cursor: cursorIndex === null ? text.length : cursorIndex };
+      },
+
+      insert(name) {
+        if (!VEDA.editor || !this.snippets[name]) return;
+        const cm = VEDA.editor;
+        const cursor = cm.getCursor();
+        const prepared = this.prepareSnippet(this.snippets[name]);
+        cm.replaceSelection(prepared.text, 'around');
+        const start = cm.indexFromPos(cursor);
+        const target = start + (prepared.cursor == null ? prepared.text.length : prepared.cursor);
+        cm.setCursor(cm.posFromIndex(target));
+        cm.focus();
       },
 
       init() {
         const container = document.getElementById('snippetList');
+        if (!container) return;
         container.innerHTML = '';
-        Object.keys(this.snippets).forEach(prefix => {
-          const item = document.createElement('div');
+        this.getForFile(VEDA.activeFile).forEach(prefix => {
+          const item = document.createElement('button');
+          item.type = 'button';
           item.className = 'tree-item';
-          item.innerHTML = `<strong>${prefix}</strong> <span style="font-size:0.7rem; color:var(--text-muted);">Insert Snippet</span>`;
-          item.onclick = () => {
-            VEDA.editor.replaceSelection(this.snippets[prefix]);
-            VEDA.editor.focus();
-          };
+          item.style.width = '100%';
+          item.style.border = '0';
+          item.innerHTML = `<span class="tree-item-info"><i class="fa-solid fa-code"></i><strong>${prefix}</strong></span><span style="font-size:.7rem;color:var(--text-muted)">Insert</span>`;
+          item.addEventListener('click', () => this.insert(prefix));
           container.appendChild(item);
         });
       }
     };
 
-    /* AI Assistant Layer */
-    const AIAssistant = {
-      triggerPrompt() {
-        UIController.setSidebarView('ai');
+    const AutocompleteEngine = {
+      dictionaries: {
+        html: [
+          'html','head','body','title','meta','link','script','style','header','main','footer','nav','section','article','aside','div','span','p','h1','h2','h3','h4','ul','ol','li','a','button','form','label','input','textarea','select','option','img','video','audio','canvas','table','thead','tbody','tr','th','td','dialog','template','details','summary','class','id','src','href','alt','title','type','name','value','placeholder','disabled','checked','selected','required','aria-label','role'
+        ],
+        css: [
+          'display','position','top','right','bottom','left','inset','z-index','box-sizing','width','min-width','max-width','height','min-height','max-height','margin','padding','gap','grid','grid-template-columns','grid-template-rows','grid-column','grid-row','flex','flex-direction','flex-wrap','align-items','align-content','justify-content','place-items','color','background','background-color','border','border-radius','box-shadow','opacity','font-family','font-size','font-weight','line-height','letter-spacing','text-align','text-decoration','white-space','overflow','transform','transition','animation','cursor','pointer-events','object-fit','content'
+        ],
+        javascript: [
+          'const','let','var','function','return','if','else','for','while','switch','case','break','continue','try','catch','throw','class','extends','new','this','import','export','default','async','await','Promise','fetch','document','window','console','Math','JSON','Array','Object','Map','Set','Date','RegExp','querySelector','querySelectorAll','getElementById','createElement','addEventListener','removeEventListener','classList','localStorage','sessionStorage','setTimeout','setInterval','clearTimeout','clearInterval'
+        ],
+        json: ['true','false','null'],
+        python: ['def','class','import','from','as','if','elif','else','for','while','in','return','try','except','with','lambda','True','False','None','print','len','range','dict','list','set']
       },
 
-      explainCode() {
-        const code = VEDA.editor.getSelection() || VEDA.editor.getValue();
-        document.getElementById('aiResponseContainer').innerText = "🤖 AI Explanation:\nThis code structure sets up dynamic interactive DOM behaviors and applies modern layout styling.";
+      language(cm) {
+        const mode = cm.getModeAt(cm.getCursor()).name || '';
+        if (mode.includes('css')) return 'css';
+        if (mode.includes('javascript')) return 'javascript';
+        if (mode.includes('xml') || mode.includes('html')) return 'html';
+        if (mode.includes('json')) return 'json';
+        if (mode.includes('python')) return 'python';
+        return 'javascript';
       },
 
-      findBugs() {
-        document.getElementById('aiResponseContainer').innerText = "🔍 Bug Check:\nNo critical syntax errors found. Ensure all event listeners clean up if elements re-render.";
+      getSuggestions(cm) {
+        const cursor = cm.getCursor();
+        const line = cm.getLine(cursor.line).slice(0, cursor.ch);
+        const match = line.match(/[A-Za-z0-9_$-]+$/);
+        const prefix = match ? match[0] : '';
+        const start = cursor.ch - prefix.length;
+        const lang = this.language(cm);
+        let items = [...(this.dictionaries[lang] || [])];
+
+        const snippetNames = SnippetEngine.getForFile(VEDA.activeFile);
+        items = [...new Set([...items, ...snippetNames])];
+        const lower = prefix.toLowerCase();
+        const filtered = items.filter(x => x.toLowerCase().startsWith(lower));
+        const list = (filtered.length ? filtered : items).slice(0, 80).map(text => ({ text, displayText: text }));
+
+        return {
+          list,
+          from: CodeMirror.Pos(cursor.line, start),
+          to: CodeMirror.Pos(cursor.line, cursor.ch),
+          completeSingle: false
+        };
       },
 
-      refactorCode() {
-        document.getElementById('aiResponseContainer').innerText = "✨ Refactor Suggestion:\nConsider modularizing event listener handlers into named arrow functions.";
+      open(force = false) {
+        if (!VEDA.editor) return;
+        const cm = VEDA.editor;
+        if (!force) {
+          const prefix = cm.getLine(cm.getCursor().line).slice(0, cm.getCursor().ch).match(/[A-Za-z0-9_$-]+$/);
+          if (!prefix || prefix[0].length < 1) return;
+        }
+        cm.showHint({ hint: this.getSuggestions.bind(this), completeSingle: false, closeOnUnfocus: true });
       }
     };
 
-    /* Ultra Fast Live Server Engine */
-    const PreviewEngine = {
-      debounceTimer: null,
-
-      setPerformanceMode(mode) {
-        VEDA.perfMode = mode;
+    const EmmetEngine = {
+      trigger() {
+        if (!VEDA.editor) return false;
+        const cm = VEDA.editor;
+        const filename = VEDA.activeFile || '';
+        if (!/\.(html?|xml)$/i.test(filename)) return false;
+        const cursor = cm.getCursor();
+        const line = cm.getLine(cursor.line).slice(0, cursor.ch);
+        const match = line.match(/(^|\s)([!#.\w>-][^\s]*)$/);
+        if (!match) return false;
+        const abbreviation = match[2];
+        const expanded = this.expand(abbreviation);
+        if (!expanded) return false;
+        const start = cursor.ch - abbreviation.length;
+        cm.replaceRange(expanded, CodeMirror.Pos(cursor.line, start), cursor, '+emmet');
+        cm.focus();
+        return true;
       },
 
-      toggleLiveServer() {
-        VEDA.isLiveServerOn = !VEDA.isLiveServerOn;
-        const btn = document.getElementById('btnLiveToggle');
-        const badge = document.getElementById('statusBadgeText');
+      expand(abbr) {
+        if (abbr === '!') return '<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Document</title>\n</head>\n<body>\n  $0\n</body>\n</html>';
+        const root = this.parseChain(abbr);
+        return root ? this.renderNode(root, 0) : null;
+      },
 
-        if (VEDA.isLiveServerOn) {
-          btn.classList.add('btn-live-active');
-          btn.innerHTML = '<i class="fa-solid fa-sync fa-spin"></i> <span class="desktop-only">Live Sync</span>';
-          badge.innerText = 'Live Sync';
-          this.runNow();
-        } else {
-          btn.classList.remove('btn-live-active');
-          btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span class="desktop-only">Paused</span>';
-          badge.innerText = 'Sync Paused';
+      parseChain(abbr) {
+        const parts = [];
+        let depth = 0, current = '';
+        for (const ch of abbr) {
+          if (ch === '[' || ch === '(') depth++;
+          if (ch === ']' || ch === ')') depth--;
+          if (ch === '>' && depth === 0) { parts.push(current); current = ''; }
+          else current += ch;
         }
+        if (current) parts.push(current);
+        let node = this.parseNode(parts.pop());
+        if (!node) return null;
+        for (let i = parts.length - 1; i >= 0; i--) node = { tag: this.parseNode(parts[i]).tag, attrs: this.parseNode(parts[i]).attrs, children: [node] };
+        return node;
       },
 
-      triggerAutoUpdate() {
-        if (!VEDA.isLiveServerOn) return;
-        clearTimeout(this.debounceTimer);
-
-        let delay = 300;
-        if (VEDA.perfMode === 'turbo') delay = 100;
-        else if (VEDA.perfMode === 'battery') delay = 800;
-
-        this.debounceTimer = setTimeout(() => {
-          requestAnimationFrame(() => this.runNow());
-        }, delay);
+      parseNode(token) {
+        if (!token) return null;
+        let repeat = 1;
+        const rep = token.match(/\*(\d+)$/);
+        if (rep) { repeat = Math.max(1, Math.min(50, Number(rep[1]))); token = token.slice(0, -rep[0].length); }
+        const textMatch = token.match(/\{([^}]*)\}$/);
+        const text = textMatch ? textMatch[1] : '';
+        if (textMatch) token = token.slice(0, textMatch.index);
+        const attrMatches = [...token.matchAll(/\[([^\]]+)\]/g)];
+        const attrs = attrMatches.map(m => m[1]).join(' ');
+        token = token.replace(/\[[^\]]+\]/g, '');
+        let tag = (token.match(/^[a-z][\w-]*/i) || ['div'])[0];
+        const id = (token.match(/#([\w-]+)/) || [])[1];
+        const classes = [...token.matchAll(/\.([\w-]+)/g)].map(m => m[1]);
+        if (id) attrs && 0;
+        const attrList = [];
+        if (id) attrList.push(`id="${id}"`);
+        if (classes.length) attrList.push(`class="${classes.join(' ')}"`);
+        if (attrs) attrList.push(attrs);
+        return { tag, attrs: attrList.join(' '), text, repeat };
       },
 
-      getCompiledHTML() {
-        let html = VEDA.files['index.html'] ? VEDA.files['index.html'].content : VEDA.editor.getValue();
+      renderNode(node, depth) {
+        if (!node) return '';
+        const voidTags = new Set(['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']);
+        const makeOne = (index) => {
+          const indent = '  '.repeat(depth);
+          const attrs = node.attrs ? ' ' + node.attrs : '';
+          if (voidTags.has(node.tag.toLowerCase())) return `${indent}<${node.tag}${attrs}>`;
+          const content = node.children ? `\n${node.children.map(child => this.renderNode(child, depth + 1)).join('\n')}\n${indent}` : (node.text || '$0');
+          return `${indent}<${node.tag}${attrs}>${content}</${node.tag}>`;
+        };
+        return Array.from({ length: node.repeat || 1 }, (_, i) => makeOne(i)).join('\n');
+      }
+    };
 
-        // Inline External Stylesheet References
-        html = html.replace(/<link\s+[^>]*href=["']([^"']+)["'][^>]*>/gi, (match, href) => {
-          if (VEDA.files[href]) return '<style>\n' + VEDA.files[href].content + '\n</style>';
-          return match;
+    const SafeEmmet = { trigger: () => EmmetEngine.trigger() };
+
+    const ProjectManager = {
+      localDirHandle: null,
+      init() {
+        try {
+          const stored = localStorage.getItem(VEDA.storageKey);
+          VEDA.files = stored ? JSON.parse(stored) : structuredClone(defaultStarterProject);
+          if (!VEDA.files || typeof VEDA.files !== 'object' || !Object.keys(VEDA.files).length) throw new Error('Invalid project state');
+        } catch (e) {
+          VEDA.files = structuredClone(defaultStarterProject);
+        }
+        VEDA.openTabs = Object.keys(VEDA.files);
+        VEDA.activeFile = VEDA.files['index.html'] ? 'index.html' : Object.keys(VEDA.files)[0] || null;
+      },
+      saveToStorage() {
+        try {
+          localStorage.setItem(VEDA.storageKey, JSON.stringify(VEDA.files));
+          const badge = document.getElementById('saveBadge');
+          if (badge) { badge.classList.add('saving'); clearTimeout(this.saveTimer); this.saveTimer = setTimeout(() => badge.classList.remove('saving'), 300); }
+        } catch (e) { console.warn('Veda storage unavailable:', e); }
+      },
+      getFileIcon(filename) {
+        const f = filename.toLowerCase();
+        if (/\.html?$/.test(f)) return 'fa-brands fa-html5';
+        if (/\.css$/.test(f)) return 'fa-brands fa-css3-alt';
+        if (/\.(js|ts)$/.test(f)) return 'fa-brands fa-js';
+        if (/\.json$/.test(f)) return 'fa-solid fa-brackets-curly';
+        if (/\.md$/.test(f)) return 'fa-brands fa-markdown';
+        if (/\.py$/.test(f)) return 'fa-brands fa-python';
+        return 'fa-solid fa-file-code';
+      },
+      sanitizeName(name) { return String(name || '').trim().replace(/[\\/:*?"<>|]/g, '_'); },
+      renderFileTree() {
+        const container = document.getElementById('fileTree');
+        if (!container) return;
+        const filter = (document.getElementById('fileFilter')?.value || '').toLowerCase();
+        container.innerHTML = '';
+        Object.keys(VEDA.files).sort((a,b) => a.localeCompare(b)).forEach(filename => {
+          if (filter && !filename.toLowerCase().includes(filter)) return;
+          const item = document.createElement('div');
+          item.className = `tree-item ${filename === VEDA.activeFile ? 'active' : ''}`;
+          const info = document.createElement('div'); info.className = 'tree-item-info';
+          const icon = document.createElement('i'); icon.className = this.getFileIcon(filename);
+          const label = document.createElement('span'); label.textContent = filename;
+          info.append(icon, label); info.addEventListener('click', () => this.openFile(filename));
+          const actions = document.createElement('div'); actions.className = 'tree-item-actions';
+          [['fa-pen','Rename',()=>this.renameFile(filename)],['fa-copy','Duplicate',()=>this.duplicateFile(filename)],['fa-trash','Delete',()=>this.deleteFile(filename)]].forEach(([ic,title,fn])=>{ const b=document.createElement('button'); b.className='icon-btn'; b.title=title; b.innerHTML=`<i class="fa-solid ${ic}"></i>`; b.addEventListener('click',e=>{e.stopPropagation();fn();}); actions.appendChild(b); });
+          item.append(info, actions); container.appendChild(item);
+        });
+        this.renderTabs();
+      },
+      renderTabs() {
+        const container = document.getElementById('editorTabs'); if (!container) return;
+        container.innerHTML = '';
+        VEDA.openTabs.forEach(filename => {
+          if (!VEDA.files[filename]) return;
+          const tab = document.createElement('div'); tab.className = `tab ${filename === VEDA.activeFile ? 'active' : ''}`;
+          const label = document.createElement('span'); label.textContent = filename; label.addEventListener('click',()=>this.openFile(filename));
+          const close = document.createElement('button'); close.className='tab-close icon-btn'; close.type='button'; close.innerHTML='<i class="fa-solid fa-xmark"></i>'; close.title='Close'; close.addEventListener('click',e=>{e.stopPropagation();this.closeTab(filename);});
+          tab.append(label, close); container.appendChild(tab);
+        });
+        const crumb = document.getElementById('breadcrumbPath'); if (crumb) crumb.textContent = VEDA.activeFile || 'No file selected';
+      },
+      modeFor(filename) {
+        const f = filename.toLowerCase();
+        if (/\.html?$/.test(f)) return 'htmlmixed';
+        if (/\.css$/.test(f)) return 'css';
+        if (/\.(js|ts)$/.test(f)) return 'javascript';
+        if (/\.json$/.test(f)) return { name:'javascript', json:true };
+        if (/\.md$/.test(f)) return 'markdown';
+        if (/\.py$/.test(f)) return 'python';
+        return 'text/plain';
+      },
+      openFile(filename) {
+        if (!VEDA.files[filename] || !VEDA.editor) return;
+        this.syncEditorToActiveFile();
+        VEDA.activeFile = filename;
+        if (!VEDA.openTabs.includes(filename)) VEDA.openTabs.push(filename);
+        VEDA.editor.operation(() => {
+          VEDA.editor.setOption('mode', this.modeFor(filename));
+          VEDA.editor.setValue(VEDA.files[filename].content || '');
+          VEDA.editor.clearHistory();
+          VEDA.editor.setCursor({line:0,ch:0});
+        });
+        this.renderFileTree();
+        SnippetEngine.init();
+        UIController.closeSidebar();
+        DiagnosticEngine.runDiagnostics();
+        VEDA.editor.focus();
+      },
+      syncEditorToActiveFile() {
+        if (VEDA.editor && VEDA.activeFile && VEDA.files[VEDA.activeFile]) VEDA.files[VEDA.activeFile].content = VEDA.editor.getValue();
+      },
+      closeTab(filename) {
+        const index = VEDA.openTabs.indexOf(filename); if (index < 0) return;
+        VEDA.openTabs.splice(index,1);
+        if (VEDA.activeFile === filename) {
+          const next = VEDA.openTabs[index] || VEDA.openTabs[index-1] || Object.keys(VEDA.files)[0] || null;
+          if (next) this.openFile(next); else { VEDA.activeFile=null; VEDA.editor.setValue(''); }
+        }
+        this.renderTabs();
+      },
+      promptNewFile() {
+        const name = this.sanitizeName(prompt('Enter filename (e.g. app.js, style.css, index.html):'));
+        if (!name || VEDA.files[name]) return;
+        VEDA.files[name] = {name,content:''}; VEDA.openTabs.push(name); this.saveToStorage(); this.openFile(name);
+      },
+      renameFile(oldName) {
+        const next = this.sanitizeName(prompt('Rename file:', oldName));
+        if (!next || next === oldName || VEDA.files[next]) return;
+        VEDA.files[next] = {name:next,content:VEDA.files[oldName]?.content || ''}; delete VEDA.files[oldName];
+        VEDA.openTabs = VEDA.openTabs.map(x=>x===oldName?next:x); if(VEDA.activeFile===oldName) VEDA.activeFile=next;
+        this.saveToStorage(); this.renderFileTree();
+      },
+      duplicateFile(filename) {
+        const next = this.sanitizeName(prompt('Duplicate as:', 'copy_'+filename));
+        if (!next || VEDA.files[next]) return;
+        VEDA.files[next] = {name:next,content:VEDA.files[filename]?.content || ''}; this.saveToStorage(); this.openFile(next);
+      },
+      deleteFile(filename) {
+        if (Object.keys(VEDA.files).length <= 1) { alert('A project must keep at least one file.'); return; }
+        if (!confirm(`Delete ${filename}?`)) return;
+        delete VEDA.files[filename]; VEDA.openTabs = VEDA.openTabs.filter(x=>x!==filename);
+        if (VEDA.activeFile===filename) { const next=VEDA.openTabs[0]||Object.keys(VEDA.files)[0]; VEDA.activeFile=next; }
+        this.saveToStorage(); this.renderFileTree(); if(VEDA.activeFile) this.openFile(VEDA.activeFile);
+      },
+      resetToDefaults() {
+        if (!confirm('Reset project to the default Veda starter project?')) return;
+        VEDA.files = structuredClone(defaultStarterProject); VEDA.openTabs=Object.keys(VEDA.files); VEDA.activeFile='index.html'; this.saveToStorage(); this.openFile('index.html');
+      },
+      async openLocalFolder() {
+        if (!('showDirectoryPicker' in window)) { alert('Folder access needs a Chromium-based browser with File System Access API.'); return; }
+        try {
+          this.localDirHandle = await window.showDirectoryPicker({mode:'readwrite'});
+          const files = {};
+          for await (const entry of this.localDirHandle.values()) {
+            if (entry.kind !== 'file') continue;
+            const file = await entry.getFile(); files[file.name]={name:file.name,content:await file.text()};
+          }
+          if (!Object.keys(files).length) { alert('No files found in the selected folder.'); return; }
+          VEDA.files=files; VEDA.openTabs=Object.keys(files); VEDA.activeFile=Object.keys(files)[0];
+          document.getElementById('folderTitle').textContent=this.localDirHandle.name; this.saveToStorage(); this.renderFileTree(); this.openFile(VEDA.activeFile);
+        } catch(e) { if(e?.name!=='AbortError') console.error(e); }
+      },
+      triggerImport(){ document.getElementById('fileInput')?.click(); },
+      handleImportFiles(e){
+        const list=Array.from(e.target.files||[]); list.forEach(file=>{ const reader=new FileReader(); reader.onload=ev=>{const name=this.sanitizeName(file.name); VEDA.files[name]={name,content:String(ev.target.result||'')}; if(!VEDA.openTabs.includes(name)) VEDA.openTabs.push(name); this.saveToStorage(); this.openFile(name);}; reader.readAsText(file); }); e.target.value='';
+      },
+      async exportZip(){
+        this.syncEditorToActiveFile(); const zip=new JSZip(); Object.values(VEDA.files).forEach(file=>zip.file(file.name,file.content||'')); const blob=await zip.generateAsync({type:'blob'}); saveAs(blob,'veda-studio-project.zip');
+      },
+      searchInProject(query){
+        const out=document.getElementById('searchResultsTree'); if(!out)return; out.innerHTML=''; const q=String(query||'').trim().toLowerCase(); if(!q)return;
+        Object.values(VEDA.files).forEach(file=>{const content=file.content||''; const idx=content.toLowerCase().indexOf(q); if(idx<0)return; const item=document.createElement('button'); item.className='tree-item'; item.style.width='100%'; item.style.border='0'; item.textContent=`${file.name} — match at line ${content.slice(0,idx).split('\n').length}`; item.addEventListener('click',()=>{this.openFile(file.name); const line=content.slice(0,idx).split('\n').length-1; const ch=content.slice(0,idx).split('\n').pop().length; VEDA.editor.setCursor({line,ch}); VEDA.editor.focus();}); out.appendChild(item);});
+      }
+    };
+
+    const EditorEngine = {
+      init() {
+        const textarea=document.getElementById('codeTextarea');
+        VEDA.editor=CodeMirror.fromTextArea(textarea,{
+          lineNumbers:true,
+          mode:'htmlmixed',
+          theme:'material',
+          lineWrapping:false,
+          indentUnit:2,
+          tabSize:2,
+          indentWithTabs:false,
+          smartIndent:true,
+          electricChars:true,
+          autoCloseBrackets:true,
+          autoCloseTags:true,
+          matchBrackets:true,
+          matchTags:{bothTags:true},
+          styleActiveLine:true,
+          foldGutter:true,
+          gutters:['CodeMirror-linenumbers','CodeMirror-foldgutter','CodeMirror-lint-markers'],
+          lint:false,
+          extraKeys:{
+            'Ctrl-Space':cm=>AutocompleteEngine.open(true),
+            'Cmd-Space':cm=>AutocompleteEngine.open(true),
+            'F1':()=>CommandPalette.open(),
+            'Ctrl-Shift-P':()=>CommandPalette.open(),
+            'Ctrl-/':cm=>cm.toggleComment(),
+            'Ctrl-S':cm=>{ProjectManager.syncEditorToActiveFile();ProjectManager.saveToStorage();},
+            'Cmd-S':cm=>{ProjectManager.syncEditorToActiveFile();ProjectManager.saveToStorage();},
+            'Shift-Alt-F':()=>this.formatCurrentCode(),
+            'Alt-F': 'findPersistent',
+            'Esc':cm=>{ if(cm.state.completionActive) cm.state.completionActive.close(); },
+            'Tab':cm=>this.handleTab(cm),
+            'Enter':cm=>{ if(cm.state.completionActive)return CodeMirror.Pass; cm.execCommand('newlineAndIndent'); }
+          }
         });
 
-        // Inline External Script References
-        html = html.replace(/<script\s+[^>]*src=["']([^"']+)["'][^>]*><\/script>/gi, (match, src) => {
-          if (VEDA.files[src]) return '<script>\n' + VEDA.files[src].content + '\n<' + '/script>';
-          return match;
+        VEDA.editor.on('beforeChange',(cm,change)=>{ if(change.origin==='setValue') return; });
+        VEDA.editor.on('change',()=>{
+          if (!VEDA.activeFile || !VEDA.files[VEDA.activeFile]) return;
+          VEDA.files[VEDA.activeFile].content=VEDA.editor.getValue();
+          ProjectManager.saveToStorage(); PreviewEngine.triggerAutoUpdate(); DiagnosticEngine.schedule();
         });
+        VEDA.editor.on('inputRead',(cm,change)=>{
+          if(change.origin!=='+input' || !change.text?.length) return;
+          const ch=change.text.join('');
+          if(/[\w.$#-]/.test(ch)) { clearTimeout(cm.__vedaHintTimer); cm.__vedaHintTimer=setTimeout(()=>{ if(!cm.state.completionActive) AutocompleteEngine.open(false); },180); }
+        });
+        VEDA.editor.on('cursorActivity',()=>{ const pos=VEDA.editor.getCursor(); document.getElementById('statusBadgeText').textContent=`Ln ${pos.line+1}, Col ${pos.ch+1}`; });
+        VEDA.editor.on('scroll',()=>{});
+      },
+      handleTab(cm){
+        if(cm.state.completionActive) { cm.state.completionActive.pick(); return; }
+        if(cm.somethingSelected()){ cm.indentSelection('add'); return; }
+        if(EmmetEngine.trigger()) return;
+        const prefix=SnippetEngine.currentPrefix(cm).value;
+        if(prefix && SnippetEngine.snippets[prefix]) { SnippetEngine.expand(prefix); return; }
+        cm.replaceSelection('  ','end');
+      },
+      formatCurrentCode(){
+        if(!VEDA.editor||!VEDA.activeFile)return;
+        const val=VEDA.editor.getValue(); let formatted=val;
+        try {
+          if(/\.html?$/i.test(VEDA.activeFile)) formatted=html_beautify(val,{indent_size:2,wrap_line_length:0});
+          else if(/\.css$/i.test(VEDA.activeFile)) formatted=css_beautify(val,{indent_size:2});
+          else if(/\.(js|json)$/i.test(VEDA.activeFile)) formatted=js_beautify(val,{indent_size:2});
+          VEDA.editor.setValue(formatted); ProjectManager.saveToStorage();
+        } catch(e){ console.warn('Format failed:',e); }
+      },
+      insertSymbol(sym){ if(!VEDA.editor)return; VEDA.editor.replaceSelection(sym,'end'); VEDA.editor.focus(); },
+      toggleComment(){ VEDA.editor?.toggleComment(); },
+      undo(){ VEDA.editor?.undo(); }, redo(){ VEDA.editor?.redo(); }
+    };
 
+    const DiagnosticEngine = {
+      timer:null,
+      schedule(){clearTimeout(this.timer);this.timer=setTimeout(()=>this.runDiagnostics(),350);},
+      runDiagnostics(){
+        const container=document.getElementById('problemsContainer'); const count=document.getElementById('diagCount'); if(!container||!VEDA.editor||!VEDA.activeFile)return;
+        container.innerHTML=''; let errors=[]; const code=VEDA.editor.getValue(); const file=VEDA.activeFile.toLowerCase();
+        try {
+          if(/\.(js|ts)$/.test(file) && typeof JSHINT==='function') { JSHINT(code,{esversion:2021,browser:true,devel:true,undef:false}); errors=(JSHINT.errors||[]).filter(Boolean); }
+          else if(/\.css$/.test(file) && typeof CSSLint!=='undefined') { errors=(CSSLint.verify(code).messages||[]).filter(x=>x.type==='error'||x.type==='warning'); }
+          else if(/\.json$/.test(file) && typeof jsonlint!=='undefined') { try { jsonlint.parse(code); } catch(e){ errors=[{line:e.line||1,character:e.col||1,reason:e.message||'Invalid JSON'}]; } }
+        } catch(e){ errors=[{line:1,character:1,reason:e.message||'Diagnostic engine error'}]; }
+        count.textContent=String(errors.length);
+        errors.forEach(err=>{
+          const item=document.createElement('button'); item.className='diag-item'; item.type='button';
+          const line=Number(err.line||1), ch=Number(err.character||err.col||1); item.innerHTML=`<span style="color:#ef4444"><i class="fa-solid fa-circle-xmark"></i> Line ${line}</span> <span>${this.escape(String(err.reason||err.message||'Problem'))}</span>`;
+          item.addEventListener('click',()=>{VEDA.editor.setCursor({line:Math.max(0,line-1),ch:Math.max(0,ch-1)});VEDA.editor.focus();}); container.appendChild(item);
+        });
+      },
+      escape(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;},
+      clearLogs(){document.getElementById('consoleLogs').innerHTML='';}
+    };
+
+    const PreviewEngine = {
+      debounceTimer:null,
+      setPerformanceMode(mode){VEDA.perfMode=mode;},
+      toggleLiveServer(){VEDA.isLiveServerOn=!VEDA.isLiveServerOn;this.updateStatus();if(VEDA.isLiveServerOn)this.runNow();},
+      updateStatus(){const btn=document.getElementById('btnLiveToggle'),badge=document.getElementById('statusBadgeText'),preview=document.getElementById('previewStatus'); if(!btn)return; if(VEDA.isLiveServerOn){btn.classList.add('btn-live-active');btn.innerHTML='<i class="fa-solid fa-bolt"></i> <span class="desktop-only">Live Sync</span>';if(preview)preview.innerHTML='<i class="fa-solid fa-circle-dot"></i> Live Sync';}else{btn.classList.remove('btn-live-active');btn.innerHTML='<i class="fa-solid fa-pause"></i> <span class="desktop-only">Paused</span>';if(preview)preview.innerHTML='<i class="fa-solid fa-circle"></i> Paused';} if(badge)badge.textContent=VEDA.isLiveServerOn?'Live Sync':'Sync Paused';},
+      triggerAutoUpdate(){if(!VEDA.isLiveServerOn)return;clearTimeout(this.debounceTimer);const delay=VEDA.perfMode==='turbo'?120:VEDA.perfMode==='battery'?900:300;this.debounceTimer=setTimeout(()=>this.runNow(),delay);},
+      getCompiledHTML(){
+        ProjectManager.syncEditorToActiveFile();
+        let html=VEDA.files['index.html']?.content || (VEDA.activeFile?.endsWith('.html')?VEDA.editor.getValue():'');
+        html=html.replace(/<link\s+([^>]*?)href=["']([^"']+)["']([^>]*)>/gi,(m,a,href,b)=>VEDA.files[href]?`<style>${VEDA.files[href].content}</style>`:m);
+        html=html.replace(/<script\s+([^>]*?)src=["']([^"']+)["']([^>]*)><\/script>/gi,(m,a,src,b)=>VEDA.files[src]?`<script>${VEDA.files[src].content.replace(/<\/script/gi,'<\\/script')}<\/script>`:m);
         return html;
       },
-
-      runNow() {
-        const iframe = document.getElementById('previewFrame');
-        if (!iframe) return;
-
-        const compiled = this.getCompiledHTML();
-        const consoleHook = `
-          <script>
-            (function() {
-              const _log = console.log, _err = console.error, _warn = console.warn;
-              console.log = function(...args) {
-                window.parent.postMessage({ type: "console", level: "info", msg: args.join(" ") }, "*");
-                _log.apply(console, args);
-              };
-              console.error = function(...args) {
-                window.parent.postMessage({ type: "console", level: "error", msg: args.join(" ") }, "*");
-                _err.apply(console, args);
-              };
-              console.warn = function(...args) {
-                window.parent.postMessage({ type: "console", level: "warn", msg: args.join(" ") }, "*");
-                _warn.apply(console, args);
-              };
-              window.onerror = function(msg, url, line) {
-                window.parent.postMessage({ type: "console", level: "error", msg: msg + " (Line " + line + ")" }, "*");
-              };
-            })();
-          <\/script>
-        `;
-
-        iframe.srcdoc = consoleHook + compiled;
+      runNow(){
+        const iframe=document.getElementById('previewFrame'); if(!iframe)return; const compiled=this.getCompiledHTML();
+        const hook=`<script>(function(){function send(level,args){try{parent.postMessage({type:'console',level:level,msg:Array.from(args).map(v=>{try{return typeof v==='string'?v:JSON.stringify(v)}catch(_){return String(v)}}).join(' ')},'*')}catch(_){} }['log','info','warn','error'].forEach(function(level){var old=console[level];console[level]=function(){send(level,arguments);old.apply(console,arguments)}});window.onerror=function(msg,url,line,col){send('error',[String(msg)+' (Line '+line+', Col '+col+')'])};window.onunhandledrejection=function(e){send('error',['Unhandled promise rejection: '+(e.reason?.message||e.reason||'unknown')])};})();<\/script>`;
+        iframe.srcdoc=hook+compiled;
       },
-
-      openBrowserWindow() {
-        const html = this.getCompiledHTML();
-        const blob = new Blob([html], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-      }
+      openBrowserWindow(){const blob=new Blob([this.getCompiledHTML()],{type:'text/html'});const url=URL.createObjectURL(blob);const win=window.open(url,'_blank','noopener');setTimeout(()=>URL.revokeObjectURL(url),60000);if(!win)alert('Popup blocked. Allow popups for Veda Studio.');}
     };
 
-    /* Diagnostic System */
-    const DiagnosticEngine = {
-      runDiagnostics() {
-        const container = document.getElementById('problemsContainer');
-        container.innerHTML = '';
-        let errors = [];
-
-        if (VEDA.activeFile.endsWith('.js')) {
-          if (typeof JSHint !== 'undefined') {
-            JSHint(VEDA.editor.getValue());
-            errors = JSHint.errors || [];
-          }
-        }
-
-        document.getElementById('diagCount').innerText = errors.length;
-
-        errors.forEach(err => {
-          if (!err) return;
-          const item = document.createElement('div');
-          item.className = 'diag-item';
-          item.innerHTML = `<span style="color:#ef4444;"><i class="fa-solid fa-circle-xmark"></i> Line ${err.line}:</span> ${err.reason}`;
-          item.onclick = () => {
-            VEDA.editor.setCursor(err.line - 1, err.character - 1);
-            VEDA.editor.focus();
-          };
-          container.appendChild(item);
-        });
-      },
-
-      clearLogs() {
-        document.getElementById('consoleLogs').innerHTML = '';
-      }
-    };
-
-    /* Theme Switcher Manager */
     const ThemeManager = {
-      themeMap: {
-        'theme-veda-light': 'default',
-        'theme-github-light': 'eclipse',
-        'theme-paper-light': 'neat',
-        'theme-pastel-day': 'default',
-        'theme-monokai': 'monokai',
-        'theme-dracula': 'dracula',
-        'theme-onedark': 'one-dark',
-        'theme-nord': 'nord',
-        'theme-cyberpunk': 'material-darker',
-        'theme-solarized': 'solarized',
-        'theme-synthwave': 'material-palenight',
-        'theme-tokyo-night': 'abbott',
-        'theme-veda-dark': 'material',
-        'theme-emerald': 'material',
-        'theme-neon-matrix': 'night',
-        'theme-sunset': 'rubyblue',
-        'theme-ocean': 'cobalt',
-        'theme-rose-pine': 'twilight',
-        'theme-mocha': 'zenburn',
-        'theme-midnight-violet': 'blackboard',
-        'theme-obsidian': 'panda-syntax',
-        'theme-ice-chill': 'nord',
-        'theme-gruvbox-dark': 'gruvbox-dark',
-        'theme-matrix-hacker': 'the-matrix',
-        'theme-isotope': 'isotope',
-        'theme-mbo': 'mbo',
-        'theme-mdn-light': 'mdn-like',
-        'theme-midnight': 'midnight',
-        'theme-paraiso': 'paraiso-dark',
-        'theme-base16-dark': 'base16-dark',
-        'theme-base16-light': 'base16-light',
-        'theme-yeti': 'yeti'
-      },
-
-      changeTheme(cls) {
-        document.body.className = cls;
-        document.getElementById('themeSelect').value = cls;
-        const cmTheme = this.themeMap[cls] || 'default';
-        if (VEDA.editor) VEDA.editor.setOption('theme', cmTheme);
-        localStorage.setItem('veda_theme_v5', cls);
-      }
+      themeMap:{'theme-veda-light':'default','theme-github-light':'eclipse','theme-paper-light':'neat','theme-pastel-day':'default','theme-monokai':'monokai','theme-dracula':'dracula','theme-onedark':'one-dark','theme-nord':'nord','theme-cyberpunk':'material-darker','theme-solarized':'solarized','theme-synthwave':'material-palenight','theme-tokyo-night':'abbott','theme-veda-dark':'material','theme-emerald':'material','theme-neon-matrix':'night','theme-sunset':'rubyblue','theme-ocean':'cobalt','theme-rose-pine':'twilight','theme-mocha':'zenburn','theme-midnight-violet':'blackboard','theme-obsidian':'panda-syntax','theme-ice-chill':'nord','theme-gruvbox-dark':'gruvbox-dark','theme-matrix-hacker':'the-matrix','theme-isotope':'isotope','theme-mbo':'mbo','theme-mdn-light':'mdn-like','theme-midnight':'midnight','theme-paraiso':'paraiso-dark','theme-base16-dark':'base16-dark','theme-base16-light':'base16-light','theme-yeti':'yeti'},
+      changeTheme(cls){if(!this.themeMap[cls])cls='theme-veda-dark';document.body.className=cls;const select=document.getElementById('themeSelect');if(select)select.value=cls;if(VEDA.editor)VEDA.editor.setOption('theme',this.themeMap[cls]);localStorage.setItem(VEDA.themeKey,cls);}
     };
 
-    /* Command Palette Modal */
+    const AIAssistant = {
+      triggerPrompt(){UIController.setSidebarView('ai');},
+      explainCode(){const code=VEDA.editor?.getSelection()||VEDA.editor?.getValue()||'';document.getElementById('aiResponseContainer').textContent=`Offline analysis\n\nLines: ${code.split('\n').length}\nCharacters: ${code.length}\nActive file: ${VEDA.activeFile||'none'}\n\nSelect a block and connect an AI provider when you want model-generated explanations.`;},
+      findBugs(){DiagnosticEngine.runDiagnostics();document.getElementById('aiResponseContainer').textContent='Diagnostics refreshed. Open the Problems panel to inspect detected syntax/lint issues.';},
+      refactorCode(){document.getElementById('aiResponseContainer').textContent='Select code first. The editor will preserve the selection so an external AI provider can refactor only the requested block.';}
+    };
+
     const CommandPalette = {
-      commands: [
-        { name: "Format Code", action: () => EditorEngine.formatCurrentCode() },
-        { name: "Run Live Preview", action: () => PreviewEngine.runNow() },
-        { name: "Toggle Live Server", action: () => PreviewEngine.toggleLiveServer() },
-        { name: "Open Direct Window", action: () => PreviewEngine.openBrowserWindow() },
-        { name: "New File", action: () => ProjectManager.promptNewFile() },
-        { name: "Export ZIP Package", action: () => ProjectManager.exportZip() },
-        { name: "Reset Default Starter Kit", action: () => ProjectManager.resetToDefaults() }
+      commands:[
+        {name:'Quick Open File',action:()=>{const name=prompt('Open file:',VEDA.activeFile||'index.html');if(name&&VEDA.files[name])ProjectManager.openFile(name);else if(name)alert('File not found: '+name);}},
+        {name:'Format Code',action:()=>EditorEngine.formatCurrentCode()},
+        {name:'Autocomplete',action:()=>AutocompleteEngine.open(true)},
+        {name:'Expand Emmet',action:()=>EmmetEngine.trigger()},
+        {name:'Run Live Preview',action:()=>PreviewEngine.runNow()},
+        {name:'Toggle Live Sync',action:()=>PreviewEngine.toggleLiveServer()},
+        {name:'Open Preview in Browser',action:()=>PreviewEngine.openBrowserWindow()},
+        {name:'New File',action:()=>ProjectManager.promptNewFile()},
+        {name:'Export ZIP Package',action:()=>ProjectManager.exportZip()},
+        {name:'Reset Starter Project',action:()=>ProjectManager.resetToDefaults()}
       ],
-
-      open() {
-        document.getElementById('commandPaletteModal').classList.add('open');
-        const input = document.getElementById('commandInput');
-        input.value = '';
-        input.focus();
-        this.filter('');
-      },
-
-      close(e) {
-        if (e) e.stopPropagation();
-        document.getElementById('commandPaletteModal').classList.remove('open');
-      },
-
-      filter(query) {
-        const list = document.getElementById('commandList');
-        list.innerHTML = '';
-        const filtered = this.commands.filter(c => c.name.toLowerCase().includes(query.toLowerCase()));
-
-        filtered.forEach(cmd => {
-          const item = document.createElement('div');
-          item.className = 'command-item';
-          item.innerText = cmd.name;
-          item.onclick = () => {
-            cmd.action();
-            this.close();
-          };
-          list.appendChild(item);
-        });
-      }
+      open(){const modal=document.getElementById('commandPaletteModal');modal.classList.add('open');const input=document.getElementById('commandInput');input.value='';input.focus();this.filter('');},
+      close(e){e?.stopPropagation();document.getElementById('commandPaletteModal').classList.remove('open');},
+      filter(query){const list=document.getElementById('commandList');list.innerHTML='';const q=String(query||'').toLowerCase();this.commands.filter(c=>c.name.toLowerCase().includes(q)).forEach(cmd=>{const item=document.createElement('button');item.className='command-item';item.type='button';item.textContent=cmd.name;item.addEventListener('click',()=>{try{cmd.action()}catch(e){console.error(e)}this.close()});list.appendChild(item);});}
     };
 
-    /* UI Controller */
     const UIController = {
-      setSidebarView(viewName) {
-        document.querySelectorAll('.sidebar-view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.act-btn').forEach(b => b.classList.remove('active'));
-
-        const target = document.getElementById('view' + viewName.charAt(0).toUpperCase() + viewName.slice(1));
-        if (target) target.classList.add('active');
-
-        document.getElementById('sidebar').classList.add('open');
-        document.getElementById('sidebarOverlay').classList.add('open');
-      },
-
-      closeSidebar() {
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('sidebarOverlay').classList.remove('open');
-      },
-
-      switchBottomTab(tab) {
-        const consoleLogs = document.getElementById('consoleLogs');
-        const problemsContainer = document.getElementById('problemsContainer');
-        const tabBtnConsole = document.getElementById('tabBtnConsole');
-        const tabBtnProblems = document.getElementById('tabBtnProblems');
-
-        if (tab === 'console') {
-          consoleLogs.style.display = 'block';
-          problemsContainer.style.display = 'none';
-          tabBtnConsole.classList.add('active');
-          tabBtnProblems.classList.remove('active');
-        } else {
-          consoleLogs.style.display = 'none';
-          problemsContainer.style.display = 'block';
-          tabBtnProblems.classList.add('active');
-          tabBtnConsole.classList.remove('active');
-        }
-      },
-
-      toggleBottomPanel() {
-        const panel = document.getElementById('bottomPanel');
-        panel.classList.toggle('collapsed');
-        const icon = document.getElementById('bottomPanelToggleIcon');
-        icon.className = panel.classList.contains('collapsed') ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
-      },
-
-      switchMobileView(view) {
-        document.querySelectorAll('.mobile-tab-btn').forEach(b => b.classList.remove('active'));
-        const editorContainer = document.getElementById('editorContainer');
-        const previewContainer = document.getElementById('previewContainer');
-
-        if (view === 'files') {
-          this.setSidebarView('explorer');
-        } else if (view === 'editor') {
-          document.getElementById('mobTabCode').classList.add('active');
-          this.closeSidebar();
-          editorContainer.classList.remove('mobile-hide');
-          previewContainer.classList.remove('mobile-show');
-        } else if (view === 'preview') {
-          document.getElementById('mobTabPreview').classList.add('active');
-          this.closeSidebar();
-          editorContainer.classList.add('mobile-hide');
-          previewContainer.classList.add('mobile-show');
-          PreviewEngine.runNow();
-        } else if (view === 'console') {
-          this.closeSidebar();
-          document.getElementById('bottomPanel').classList.remove('collapsed');
-        }
-      }
+      setSidebarView(viewName){document.querySelectorAll('.sidebar-view').forEach(v=>v.classList.remove('active'));const target=document.getElementById('view'+viewName.charAt(0).toUpperCase()+viewName.slice(1));if(target)target.classList.add('active');document.getElementById('sidebar')?.classList.add('open');document.getElementById('sidebarOverlay')?.classList.add('open');},
+      closeSidebar(){document.getElementById('sidebar')?.classList.remove('open');document.getElementById('sidebarOverlay')?.classList.remove('open');},
+      switchBottomTab(tab){const c=document.getElementById('consoleLogs'),p=document.getElementById('problemsContainer'),bc=document.getElementById('tabBtnConsole'),bp=document.getElementById('tabBtnProblems');const isC=tab==='console';c.style.display=isC?'block':'none';p.style.display=isC?'none':'block';bc.classList.toggle('active',isC);bp.classList.toggle('active',!isC);},
+      toggleBottomPanel(){const panel=document.getElementById('bottomPanel');panel.classList.toggle('collapsed');const icon=document.getElementById('bottomPanelToggleIcon');icon.className=panel.classList.contains('collapsed')?'fa-solid fa-chevron-up':'fa-solid fa-chevron-down';},
+      switchMobileView(view){document.querySelectorAll('.mobile-tab-btn').forEach(b=>b.classList.remove('active'));const ec=document.getElementById('editorContainer'),pc=document.getElementById('previewContainer');if(view==='files'){this.setSidebarView('explorer');return;}if(view==='editor'){document.getElementById('mobTabCode').classList.add('active');this.closeSidebar();ec.classList.remove('mobile-hide');pc.classList.remove('mobile-show');VEDA.editor?.refresh();}else if(view==='preview'){document.getElementById('mobTabPreview').classList.add('active');this.closeSidebar();ec.classList.add('mobile-hide');pc.classList.add('mobile-show');PreviewEngine.runNow();}else if(view==='console'){this.closeSidebar();document.getElementById('bottomPanel').classList.remove('collapsed');this.switchBottomTab('console');}}
     };
 
-    /* Global Window Message Receiver for Console Logs */
-    window.addEventListener('message', (e) => {
-      if (e.data && e.data.type === 'console') {
-        const logs = document.getElementById('consoleLogs');
-        const line = document.createElement('div');
-        line.className = `log-line log-${e.data.level}`;
-        line.innerText = `[${e.data.level.toUpperCase()}] ${e.data.msg}`;
-        logs.appendChild(line);
-        logs.scrollTop = logs.scrollHeight;
-      }
+    window.addEventListener('message',e=>{if(!e.data||e.data.type!=='console')return;const logs=document.getElementById('consoleLogs');const line=document.createElement('div');line.className=`log-line log-${e.data.level||'info'}`;line.textContent=`[${String(e.data.level||'info').toUpperCase()}] ${e.data.msg||''}`;logs.appendChild(line);logs.scrollTop=logs.scrollHeight;});
+
+    document.addEventListener('keydown',e=>{
+      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='p'){e.preventDefault();CommandPalette.open();}
+      if(e.key==='F1'){e.preventDefault();CommandPalette.open();}
+      if(e.key==='Escape'){CommandPalette.close();UIController.closeSidebar();}
     });
 
-    /* Application Initialization */
-    document.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener('resize',()=>VEDA.editor?.refresh());
+
+    document.addEventListener('DOMContentLoaded',()=>{
       ProjectManager.init();
       EditorEngine.init();
-      SnippetEngine.init();
-
-      const savedTheme = localStorage.getItem('veda_theme_v5') || 'theme-veda-dark';
-      ThemeManager.changeTheme(savedTheme);
-
       ProjectManager.renderFileTree();
-      ProjectManager.openFile(VEDA.activeFile);
+      if(VEDA.activeFile) ProjectManager.openFile(VEDA.activeFile);
+      SnippetEngine.init();
+      const savedTheme=localStorage.getItem(VEDA.themeKey)||localStorage.getItem('veda_theme_v5')||'theme-veda-dark';
+      ThemeManager.changeTheme(savedTheme);
+      PreviewEngine.updateStatus();
       PreviewEngine.runNow();
+      DiagnosticEngine.runDiagnostics();
     });
   </script>
 </body>
